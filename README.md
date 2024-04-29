@@ -1,2 +1,2 @@
 # crm-sprout
-This is webApi - webClient - desktopClient sample app on .net8
+This is webApi - webClient - desktopClient sample CRM app on .net8
