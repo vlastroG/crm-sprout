@@ -19,6 +19,9 @@ namespace Consulting.Models {
         [MaxLength(1024)]
         public string? ContentFull { get; set; }
 
+        [MaxLength(128 * 1024)]
+        public byte[]? Photo { get; set; }
+
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) {
             var textErrors = ValidateTextProperties();
