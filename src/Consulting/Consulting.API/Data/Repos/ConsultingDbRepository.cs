@@ -39,6 +39,12 @@ namespace Consulting.API.Data.Repos {
         /// <exception cref="System.ComponentModel.DataAnnotations.ValidationException"></exception>
         public async Task UpdateAsync(TEntity item) {
             if(item is null) { throw new ArgumentNullException(nameof(item)); }
+            var trackedCopies = _db.ChangeTracker
+                .Entries<TEntity>()
+                .Where(entity => entity.Entity.Id == item.Id);
+            foreach(var entity in trackedCopies) {
+                entity.State = EntityState.Deleted;
+            }
             _dbSet.Update(item);
             if(AutoSaveChanges) {
                 await _db.SaveChangesAsync();

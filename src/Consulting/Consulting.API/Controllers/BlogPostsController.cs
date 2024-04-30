@@ -29,7 +29,7 @@ namespace Consulting.API.Controllers {
         [AllowAnonymous]
         public async Task<IActionResult> Get(int id) {
             var item = await _repository.GetAsync(id);
-            return item != null ? Ok(item) : BadRequest();
+            return item != null ? Ok(item) : NotFound();
         }
 
         [HttpPost("Create")]

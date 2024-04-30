@@ -48,7 +48,7 @@ namespace Consulting.API.Controllers {
                     return BadRequest("Company service doesn't exist.");
                 }
                 item.CompanyService = service;
-                item.Status = await _context.ConsultingTaskStatuses.FindAsync(TaskStatuses.New);
+                item.Status = await _context.ConsultingTaskStatuses.FindAsync((int) TaskStatuses.New);
                 await _repository.AddAsync(item);
                 return Ok();
             } catch(ValidationException e) { return BadRequest(e.Message); }
