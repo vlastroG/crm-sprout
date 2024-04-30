@@ -34,9 +34,9 @@ namespace Consulting.API.Models {
         public DateTime IssuedAt => DateTime.UtcNow;
 
         /// <summary>
-        /// Set the timespan the token will be valid for (default is 5 min)
+        /// Set the timespan the token will be valid for (default is 15 min)
         /// </summary>
-        public TimeSpan ValidFor { get; set; } = TimeSpan.FromMinutes(5);
+        public TimeSpan ValidFor { get; set; } = TimeSpan.FromMinutes(15);
 
 
 
