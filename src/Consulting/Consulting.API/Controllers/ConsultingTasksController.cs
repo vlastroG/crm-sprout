@@ -79,11 +79,5 @@ namespace Consulting.API.Controllers {
                 return BadRequest();
             }
         }
-
-        [HttpDelete("Delete/{id}")]
-        public async Task<IActionResult> Delete(int id) {
-            bool success = await _repository.RemoveAsync(id);
-            return success ? Ok() : NotFound();
-        }
     }
 }

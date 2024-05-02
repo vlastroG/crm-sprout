@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Consulting.API", "Consultin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Consulting.Models", "Consulting.Models\Consulting.Models.csproj", "{A6D86B0A-98D6-4A0C-9A83-01B510CFBABC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Consulting.WebClient", "Consulting.WebClient\Consulting.WebClient.csproj", "{C0DE1D29-70F9-400E-81E9-C0232DD4377B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,14 @@ Global
 		{A6D86B0A-98D6-4A0C-9A83-01B510CFBABC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A6D86B0A-98D6-4A0C-9A83-01B510CFBABC}.Release|x64.ActiveCfg = Release|x64
 		{A6D86B0A-98D6-4A0C-9A83-01B510CFBABC}.Release|x64.Build.0 = Release|x64
+		{C0DE1D29-70F9-400E-81E9-C0232DD4377B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0DE1D29-70F9-400E-81E9-C0232DD4377B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0DE1D29-70F9-400E-81E9-C0232DD4377B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C0DE1D29-70F9-400E-81E9-C0232DD4377B}.Debug|x64.Build.0 = Debug|Any CPU
+		{C0DE1D29-70F9-400E-81E9-C0232DD4377B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0DE1D29-70F9-400E-81E9-C0232DD4377B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0DE1D29-70F9-400E-81E9-C0232DD4377B}.Release|x64.ActiveCfg = Release|Any CPU
+		{C0DE1D29-70F9-400E-81E9-C0232DD4377B}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
