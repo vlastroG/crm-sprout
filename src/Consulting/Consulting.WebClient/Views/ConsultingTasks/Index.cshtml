@@ -24,6 +24,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.CreatorEmail)
             </th>
+            <th>
+                Статус
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -45,6 +48,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CreatorEmail)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status!.Name)
                 </td>
                 <td>
                     @Html.ActionLink("Редактировать", "Edit", new { Id = item.Id }) |

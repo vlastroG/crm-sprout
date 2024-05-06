@@ -1,5 +1,6 @@
 using Consulting.Models;
 using Consulting.WebClient.Helpers;
+using Consulting.WebClient.Models;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -73,11 +74,14 @@ namespace Consulting.WebClient.Controllers {
 
                 using HttpClient client = _httpClientFactory.CreateClient();
                 AddAuthenticationHeader(client);
+                var statuses = await client.GetFromJsonAsync<IEnumerable<ConsultingTaskStatus>>(Constants.ConsultingTaskStatusesUri);
+                HttpContext.Items.Add(Constants.ConsultingTaskStatusesUri, statuses);
                 var consultingTask = await client.GetFromJsonAsync<ConsultingTask>(Constants.ConsultingTasksUri + id);
                 if(consultingTask is null) {
                     return NotFound();
                 }
-                return View(consultingTask);
+                var vm = new TaskEditorViewModel() { ConsultingTaskId = consultingTask.Id, StatusId = consultingTask.Status!.Id };
+                return View(vm);
             } else {
                 return RedirectToAccessDenied();
             }
@@ -86,16 +90,20 @@ namespace Consulting.WebClient.Controllers {
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CreationDate,CreatorName,CreatorEmail,Description,Status,CompanyService")] ConsultingTask consultingTask) {
+        public async Task<IActionResult> Edit(int id, [Bind("ConsultingTaskId,StatusId")] TaskEditorViewModel viewModel) {
             if(HttpContext.Session.IsAdminUser()) {
-                if(id != consultingTask.Id) {
+                if(id != viewModel?.ConsultingTaskId) {
                     return NotFound();
                 }
 
                 if(ModelState.IsValid) {
                     using HttpClient client = _httpClientFactory.CreateClient();
                     AddAuthenticationHeader(client);
-                    var response = await client.PutAsJsonAsync(Constants.ConsultingTasksUri + Constants.Update + id, consultingTask);
+                    var task = await client.GetFromJsonAsync<ConsultingTask>(Constants.ConsultingTasksUri + viewModel.ConsultingTaskId);
+                    if(task is null) { return NotFound(); }
+                    task.Status = new ConsultingTaskStatus() { Id = viewModel.StatusId };
+
+                    var response = await client.PutAsJsonAsync(Constants.ConsultingTasksUri + Constants.Update + id, task);
                     if(response.IsSuccessStatusCode) {
                         return RedirectToAction(nameof(Index));
                     } else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden) {
@@ -104,7 +112,7 @@ namespace Consulting.WebClient.Controllers {
                         return NotFound();
                     }
                 }
-                return View(consultingTask);
+                return View(viewModel);
             } else {
                 return RedirectToAccessDenied();
             }
