@@ -12,6 +12,7 @@ namespace Consulting.Models {
 
 
         [Required]
+        [DisplayName("Дата создания")]
         public DateTime CreationDate { get; set; }
 
         [Required]

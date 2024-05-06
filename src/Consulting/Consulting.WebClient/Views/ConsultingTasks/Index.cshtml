@@ -19,7 +19,7 @@
                 @Html.DisplayNameFor(model => model.CreatorName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                Вид услуги
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CreatorEmail)
@@ -44,7 +44,7 @@
                     @Html.DisplayFor(modelItem => item.CreatorName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Description)
+                    @Html.DisplayFor(modelItem => item.CompanyService!.Name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CreatorEmail)
