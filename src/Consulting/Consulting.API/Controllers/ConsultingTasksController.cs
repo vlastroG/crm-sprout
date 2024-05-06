@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 
 namespace Consulting.API.Controllers {
-    [Route("api/Tasks")]
+    [Route("api/[controller]")]
     [ApiController]
     [Authorize(Helpers.Constants.Strings.AuthPolicy.AdminPolicy)]
     public class ConsultingTasksController : ControllerBase {

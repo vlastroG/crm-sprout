@@ -1,8 +1,5 @@
 ﻿@using System.IdentityModel.Tokens.Jwt
 
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
-
 <ul class="navbar-nav">
     @if (!string.IsNullOrWhiteSpace(Context.Session.GetString(Consulting.WebClient.Helpers.Constants.TokenName)))
     {

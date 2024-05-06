@@ -1,7 +1,6 @@
 #nullable disable
 
 using System.ComponentModel.DataAnnotations;
-using System.Web;
 
 using Consulting.Models;
 
@@ -55,14 +54,14 @@ namespace Consulting.WebClient.Areas.Identity.Pages.Account {
             if(ModelState.IsValid) {
                 using HttpClient client = _httpClientFactory.CreateClient();
 
-                var builder = new UriBuilder(Helpers.Constants.LoginUri);
-                var query = HttpUtility.ParseQueryString(builder.Query);
-                query["userName"] = Input.Email;
-                query["password"] = Input.Password;
-                builder.Query = query.ToString();
-                string url = builder.ToString();
-                var request = new HttpRequestMessage(HttpMethod.Post, url);
+                client.DefaultRequestHeaders.Add("userName", Input.Email);
+                client.DefaultRequestHeaders.Add("password", Input.Password);
+                var request = new HttpRequestMessage(HttpMethod.Post, Helpers.Constants.LoginUri);
                 var response = await client.SendAsync(request);
+                if(response.StatusCode == System.Net.HttpStatusCode.BadRequest) {
+                    ModelState.AddModelError(string.Empty, "Неверный логин или пароль.");
+                    return Page();
+                }
                 var content = await response.Content.ReadAsStringAsync();
 
                 try {

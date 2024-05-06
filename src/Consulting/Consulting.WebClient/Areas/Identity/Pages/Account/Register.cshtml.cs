@@ -1,7 +1,6 @@
 #nullable disable
 
 using System.ComponentModel.DataAnnotations;
-using System.Web;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -48,13 +47,9 @@ namespace Consulting.WebClient.Areas.Identity.Pages.Account {
             if(ModelState.IsValid) {
                 using HttpClient client = _httpClientFactory.CreateClient();
 
-                var builder = new UriBuilder(Helpers.Constants.RegisterUri);
-                var query = HttpUtility.ParseQueryString(builder.Query);
-                query["email"] = Input.Email;
-                query["password"] = Input.Password;
-                builder.Query = query.ToString();
-                string url = builder.ToString();
-                var request = new HttpRequestMessage(HttpMethod.Post, url);
+                client.DefaultRequestHeaders.Add("email", Input.Email);
+                client.DefaultRequestHeaders.Add("password", Input.Password);
+                var request = new HttpRequestMessage(HttpMethod.Post, Helpers.Constants.RegisterUri);
                 var response = await client.SendAsync(request);
                 if(response.IsSuccessStatusCode) {
                     return LocalRedirect(returnUrl);

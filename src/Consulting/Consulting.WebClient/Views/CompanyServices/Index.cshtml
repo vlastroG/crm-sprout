@@ -1,47 +1,61 @@
-﻿@model IEnumerable<Consulting.Models.CompanyService>
+﻿@using Consulting.WebClient.Helpers
+@model IEnumerable<Consulting.Models.CompanyService>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Услуги компании</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (Context.Session.IsAdminUser())
+{
+    <p>
+        <a asp-action="Create">Добавить услугу</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @if (Context.Session.IsAdminUser())
+                    {
+                        @* <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> *@
+                        @Html.ActionLink("Редактировать", "Edit", new { Id = item.Id })
+                        <text> | </text>
+                        @Html.ActionLink("Подробности", "Details", new { Id = item.Id })
+                        <text> | </text>
+                        @Html.ActionLink("Удалить", "Delete", new { Id = item.Id })
+                    } else
+                    {
+                        @Html.ActionLink("Подробности", "Details", new { Id = item.Id })
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

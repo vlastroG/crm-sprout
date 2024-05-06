@@ -25,7 +25,7 @@ namespace Consulting.WebClient {
             app.UseSession();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=ConsultingTasks}/{action=Create}/{id?}");
             app.MapRazorPages();
 
             app.Run();

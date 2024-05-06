@@ -22,5 +22,10 @@ namespace Consulting.WebClient.Controllers {
             HttpContext.Session.Clear();
             return RedirectToAction("Create", "ConsultingTasks");
         }
+
+        [HttpGet]
+        public IActionResult Contacts() {
+            return View("Contacts");
+        }
     }
 }

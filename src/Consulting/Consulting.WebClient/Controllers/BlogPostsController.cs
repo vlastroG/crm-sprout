@@ -50,7 +50,7 @@ namespace Consulting.WebClient.Controllers {
                 if(ModelState.IsValid) {
                     using HttpClient client = _httpClientFactory.CreateClient();
                     AddAuthenticationHeader(client);
-                    var response = await client.PutAsJsonAsync(Constants.BlogPostsUri + Constants.Create, blogPost);
+                    var response = await client.PostAsJsonAsync(Constants.BlogPostsUri + Constants.Create, blogPost);
                     if(response.IsSuccessStatusCode) {
                         return RedirectToAction(nameof(Index));
                     } else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden) {
@@ -94,7 +94,7 @@ namespace Consulting.WebClient.Controllers {
                 if(ModelState.IsValid) {
                     using HttpClient client = _httpClientFactory.CreateClient();
                     AddAuthenticationHeader(client);
-                    var response = await client.PostAsJsonAsync(Constants.BlogPostsUri + Constants.Update + id, blogPost);
+                    var response = await client.PutAsJsonAsync(Constants.BlogPostsUri + Constants.Update + id, blogPost);
                     if(response.IsSuccessStatusCode) {
                         return RedirectToAction(nameof(Index));
                     } else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden) {

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Consulting.API.Controllers {
-    [Route("api/Statuses")]
+    [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
     public class ConsultingTaskStatusesController : ControllerBase {

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Consulting.API.Controllers {
-    [Route("api/Projects")]
+    [Route("api/[controller]")]
     [ApiController]
     [Authorize(Helpers.Constants.Strings.AuthPolicy.AdminPolicy)]
     public class ConsultingProjectsController : ControllerBase {
