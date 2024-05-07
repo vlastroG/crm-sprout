@@ -80,7 +80,15 @@ namespace Consulting.WebClient.Controllers {
                 if(consultingTask is null) {
                     return NotFound();
                 }
-                var vm = new TaskEditorViewModel() { ConsultingTaskId = consultingTask.Id, StatusId = consultingTask.Status!.Id };
+                var vm = new TaskEditorViewModel() {
+                    ConsultingTaskId = consultingTask.Id,
+                    StatusId = consultingTask.Status!.Id,
+                    CreationDate = consultingTask.CreationDate,
+                    CreatorName = consultingTask.CreatorName,
+                    CreatorEmail = consultingTask.CreatorEmail,
+                    CompanyService = consultingTask.CompanyService!.Name,
+                    Description = consultingTask.Description
+                };
                 return View(vm);
             } else {
                 return RedirectToAccessDenied();

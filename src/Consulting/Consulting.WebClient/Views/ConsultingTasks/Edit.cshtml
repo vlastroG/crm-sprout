@@ -11,7 +11,51 @@
 <h4>Заявка</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div>
+        <dl>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ConsultingTaskId)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ConsultingTaskId)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CreationDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CreationDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CreatorName)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CreatorName)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CreatorName)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CreatorName)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CreatorEmail)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CreatorEmail)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CompanyService)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CompanyService)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+        </dl>
         <form asp-action="Edit">
             @* <input type="hidden" asp-for="StatusId" /> *@
             <input type="hidden" asp-for="ConsultingTaskId" />
