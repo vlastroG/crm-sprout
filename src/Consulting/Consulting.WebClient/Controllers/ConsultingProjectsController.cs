@@ -1,5 +1,6 @@
 using Consulting.Models;
 using Consulting.WebClient.Helpers;
+using Consulting.WebClient.Models;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,7 +39,7 @@ namespace Consulting.WebClient.Controllers {
         [HttpGet]
         public IActionResult Create() {
             if(HttpContext.Session.IsAdminUser()) {
-                return View();
+                return View(new ProjectViewModel());
             } else {
                 return RedirectToAccessDenied();
             }
@@ -46,21 +47,30 @@ namespace Consulting.WebClient.Controllers {
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Photo")] ConsultingProject consultingProject) {
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Photo")] ProjectViewModel consultingProjectViewModel) {
             if(HttpContext.Session.IsAdminUser()) {
                 if(ModelState.IsValid) {
                     using HttpClient client = _httpClientFactory.CreateClient();
                     AddAuthenticationHeader(client);
-                    var response = await client.PostAsJsonAsync(Constants.ConsultingProjectsUri + Constants.Create, consultingProject);
+                    var project = new ConsultingProject() {
+                        Description = consultingProjectViewModel.Description,
+                        Name = consultingProjectViewModel.Name,
+                        Photo = await ConvertToByteArray(consultingProjectViewModel.Photo)
+                    };
+
+                    var response = await client.PostAsJsonAsync(Constants.ConsultingProjectsUri + Constants.Create, project);
                     if(response.IsSuccessStatusCode) {
                         return RedirectToAction(nameof(Index));
                     } else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden) {
                         return RedirectToAccessDenied();
+                    } else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized) {
+                        return RedirectToLogin();
                     } else {
-                        return BadRequest();
+                        ModelState.AddModelError(nameof(ProjectViewModel.Photo), "Image must be jpeg 225x400 px no greater than 128 KB");
+                        return View(consultingProjectViewModel);
                     }
                 }
-                return View(consultingProject);
+                return View(consultingProjectViewModel);
             } else {
                 return RedirectToAccessDenied();
             }
@@ -144,6 +154,17 @@ namespace Consulting.WebClient.Controllers {
                 }
             } else {
                 return RedirectToAccessDenied();
+            }
+        }
+
+        private async Task<byte[]> ConvertToByteArray(IFormFile? formFile) {
+            if(formFile is not null && formFile.Length > 0) {
+                using(var ms = new MemoryStream()) {
+                    await formFile.CopyToAsync(ms);
+                    return ms.ToArray();
+                }
+            } else {
+                return Array.Empty<byte>();
             }
         }
     }

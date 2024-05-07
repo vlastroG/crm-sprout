@@ -58,8 +58,6 @@ namespace Consulting.WebClient.Controllers {
                 var response = await client.PostAsJsonAsync(Constants.ConsultingTasksUri + Constants.Create, consultingTask);
                 if(response.IsSuccessStatusCode) {
                     return RedirectToAction(nameof(Index));
-                } else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden) {
-                    return RedirectToAccessDenied();
                 } else {
                     return BadRequest();
                 }
