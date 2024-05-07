@@ -57,7 +57,6 @@
             </dd>
         </dl>
         <form asp-action="Edit">
-            @* <input type="hidden" asp-for="StatusId" /> *@
             <input type="hidden" asp-for="ConsultingTaskId" />
             @{
                 bool success = Context.Items.TryGetValue(Constants.ConsultingTaskStatusesUri, out object? valueModel);

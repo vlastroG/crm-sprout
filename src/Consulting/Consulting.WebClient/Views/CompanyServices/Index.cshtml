@@ -17,9 +17,6 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
@@ -33,9 +30,6 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
@@ -44,7 +38,6 @@
                 <td>
                     @if (Context.Session.IsAdminUser())
                     {
-                        @* <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> *@
                         @Html.ActionLink("Редактировать", "Edit", new { Id = item.Id })
                         <text> | </text>
                         @Html.ActionLink("Подробности", "Details", new { Id = item.Id })

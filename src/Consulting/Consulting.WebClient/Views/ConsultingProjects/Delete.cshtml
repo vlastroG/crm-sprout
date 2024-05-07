@@ -11,6 +11,10 @@
     <h4>ConsultingProject</h4>
     <hr />
     <dl class="row">
+        <dd class="col-sm-10">
+            <img src="data:image;base64,@System.Convert.ToBase64String(Model.Photo ?? Array.Empty<byte>())" />
+        </dd>
+        <dd/>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
@@ -22,18 +26,6 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Photo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Photo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id)
         </dd>
     </dl>
     

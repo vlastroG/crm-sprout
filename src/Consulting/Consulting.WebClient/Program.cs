@@ -1,3 +1,5 @@
+using Consulting.WebClient.Services;
+
 namespace Consulting.WebClient {
     public class Program {
         public static void Main(string[] args) {
@@ -8,6 +10,7 @@ namespace Consulting.WebClient {
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession();
             builder.Services.AddRazorPages();
+            builder.Services.AddSingleton<FormFileConverter>();
 
             var app = builder.Build();
 

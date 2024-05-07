@@ -31,9 +31,11 @@ namespace Consulting.Models {
         public string Description { get; set; }
 
         [Required]
+        [DisplayName("Статус")]
         public ConsultingTaskStatus? Status { get; set; }
 
         [Required]
+        [DisplayName("Вид услуги")]
         public CompanyService? CompanyService { get; set; }
 
 

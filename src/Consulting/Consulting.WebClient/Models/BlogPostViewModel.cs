@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 using Consulting.WebClient.Attributes;
@@ -6,31 +5,28 @@ using Consulting.WebClient.Attributes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Consulting.WebClient.Models {
-
-    public class ProjectViewModel {
-        public ProjectViewModel() {
+    public class BlogPostViewModel {
+        public BlogPostViewModel() {
 
         }
+
 
         [Required]
         public int Id { get; set; } = 0;
 
         [Required]
-        [MaxLength(64)]
-        [DisplayName("Название")]
+        [MaxLength(32)]
         public string Name { get; set; } = string.Empty;
 
         [Required]
+        [MaxLength(256)]
+        public string ContentShort { get; set; } = string.Empty;
+
         [MaxLength(1024)]
-        [DisplayName("Описание")]
-        public string Description { get; set; } = string.Empty;
+        public string? ContentFull { get; set; }
 
         [BindProperty]
-        [DisplayName("Фото")]
         [IFormFileMaxLength(1024 * 128, ErrorMessage = "File must be not greater than 128KB")]
         public IFormFile? Photo { get; set; }
-
-        [DisplayName("Текущее фото")]
-        public string? ExistPhoto { get; set; }
     }
 }

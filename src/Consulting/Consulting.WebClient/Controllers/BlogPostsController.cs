@@ -1,14 +1,18 @@
 using Consulting.Models;
 using Consulting.WebClient.Helpers;
+using Consulting.WebClient.Models;
+using Consulting.WebClient.Services;
 
 using Microsoft.AspNetCore.Mvc;
 
 namespace Consulting.WebClient.Controllers {
     public class BlogPostsController : AuthBaseController {
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly FormFileConverter _formFileConverter;
 
-        public BlogPostsController(IHttpClientFactory httpClientFactory) {
+        public BlogPostsController(IHttpClientFactory httpClientFactory, FormFileConverter formFileConverter) {
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _formFileConverter = formFileConverter ?? throw new ArgumentNullException(nameof(formFileConverter));
         }
 
 
@@ -45,11 +49,18 @@ namespace Consulting.WebClient.Controllers {
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,ContentShort,ContentFull,Photo")] BlogPost blogPost) {
+        public async Task<IActionResult> Create([Bind("Id,Name,ContentShort,ContentFull,Photo")] BlogPostViewModel blogPostViewModel) {
             if(HttpContext.Session.IsAdminUser()) {
                 if(ModelState.IsValid) {
                     using HttpClient client = _httpClientFactory.CreateClient();
                     AddAuthenticationHeader(client);
+                    var blogPost = new BlogPost() {
+                        Name = blogPostViewModel.Name,
+                        ContentShort = blogPostViewModel.ContentShort,
+                        ContentFull = blogPostViewModel.ContentFull,
+                        Photo = await _formFileConverter.ConvertToByteArray(blogPostViewModel.Photo)
+                    };
+
                     var response = await client.PostAsJsonAsync(Constants.BlogPostsUri + Constants.Create, blogPost);
                     if(response.IsSuccessStatusCode) {
                         return RedirectToAction(nameof(Index));
@@ -58,10 +69,11 @@ namespace Consulting.WebClient.Controllers {
                     } else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized) {
                         return RedirectToLogin();
                     } else {
+                        ModelState.AddModelError(nameof(BlogPostViewModel.Photo), "Image must be jpeg 225x400 px no greater than 128 KB");
                         return BadRequest();
                     }
                 }
-                return View(blogPost);
+                return View(blogPostViewModel);
             } else {
                 return RedirectToAccessDenied();
             }
@@ -101,6 +113,8 @@ namespace Consulting.WebClient.Controllers {
                         return RedirectToAction(nameof(Index));
                     } else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden) {
                         return RedirectToAccessDenied();
+                    } else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized) {
+                        return RedirectToLogin();
                     } else {
                         return NotFound();
                     }
@@ -140,6 +154,8 @@ namespace Consulting.WebClient.Controllers {
                     return RedirectToAction(nameof(Index));
                 } else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden) {
                     return RedirectToAccessDenied();
+                } else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized) {
+                    return RedirectToLogin();
                 } else {
                     return NotFound();
                 }

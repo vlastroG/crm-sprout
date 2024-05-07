@@ -64,7 +64,7 @@ namespace Consulting.API.Controllers {
             if(item is null || id != item.Id || id < 1) { return BadRequest(); }
             if(!ImageIsValid(item.Photo ?? Array.Empty<byte>())) {
                 return BadRequest(
-                    $"Photo must be jpeg|jpg, size must be not greater than {_photoMaxLength} bytes, " +
+                    $"Photo size must be not greater than {_photoMaxLength / 1024} KB, " +
                     $"width must be {_photoWidth}, height must be {_photoHeight}");
             }
             try {
@@ -91,8 +91,8 @@ namespace Consulting.API.Controllers {
             if(imgBytes.Length <= _photoMaxLength) {
                 using(var ms = new MemoryStream(imgBytes)) {
                     IImage image = PlatformImage.FromStream(ms, ImageFormat.Jpeg);
-                    var width = image.Width;
-                    var height = image.Height;
+                    var width = image.Height; //don't know why
+                    var height = image.Width; //don't know why
                     return Math.Round(Math.Abs(width - _photoWidth), 5) <= _tolerance
                         && Math.Round(Math.Abs(height - _photoHeight), 5) <= _tolerance;
                 }

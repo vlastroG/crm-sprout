@@ -102,6 +102,8 @@ namespace Consulting.WebClient.Controllers {
                         return RedirectToAction(nameof(Index));
                     } else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden) {
                         return RedirectToAccessDenied();
+                    } else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized) {
+                        return RedirectToLogin();
                     } else {
                         return NotFound();
                     }
@@ -141,6 +143,8 @@ namespace Consulting.WebClient.Controllers {
                     return RedirectToAction(nameof(Index));
                 } else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden) {
                     return RedirectToAccessDenied();
+                } else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized) {
+                    return RedirectToLogin();
                 } else {
                     return NotFound();
                 }

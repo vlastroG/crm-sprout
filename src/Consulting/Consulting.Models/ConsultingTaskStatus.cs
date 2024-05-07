@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Consulting.Models {
@@ -9,6 +10,7 @@ namespace Consulting.Models {
 
         [Required]
         [MaxLength(32)]
+        [DisplayName("Название")]
         public string Name { get; set; }
 
 

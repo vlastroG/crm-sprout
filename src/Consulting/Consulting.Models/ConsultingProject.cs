@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Consulting.Models {
@@ -10,13 +11,16 @@ namespace Consulting.Models {
 
         [Required]
         [MaxLength(64)]
+        [DisplayName("Название")]
         public string Name { get; set; }
 
         [Required]
         [MaxLength(1024)]
+        [DisplayName("Описание")]
         public string Description { get; set; }
 
         [MaxLength(128 * 1024)]
+        [DisplayName("Фото")]
         public byte[]? Photo { get; set; }
 
 
