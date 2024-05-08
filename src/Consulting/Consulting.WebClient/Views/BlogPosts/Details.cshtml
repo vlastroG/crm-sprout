@@ -1,0 +1,45 @@
+﻿@using Consulting.WebClient.Helpers
+@model Consulting.Models.BlogPost
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Подробности</h1>
+
+<div>
+    <h4>Пост</h4>
+    <hr />
+    <dl class="row">
+        <dd class="col-sm-10">
+            <img src="data:image;base64,@System.Convert.ToBase64String(Model.Photo ?? Array.Empty<byte>())" />
+        </dd>
+        <dd/>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ContentShort)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ContentShort)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ContentFull)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ContentFull)
+        </dd>
+    </dl>
+</div>
+<div>
+    @if (Context.Session.IsAdminUser())
+    {
+        @Html.ActionLink("Редактировать", "Edit", new { Id = Model.Id })
+        @Html.DisplayText("|")
+    }
+    <a asp-action="Index">Назад к списку</a>
+</div>

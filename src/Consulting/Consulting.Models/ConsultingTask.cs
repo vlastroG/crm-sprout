@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Consulting.Models {
@@ -11,24 +12,30 @@ namespace Consulting.Models {
 
 
         [Required]
+        [DisplayName("Дата создания")]
         public DateTime CreationDate { get; set; }
 
         [Required]
         [MaxLength(64)]
+        [DisplayName("ФИО")]
         public string CreatorName { get; set; }
 
         [Required]
         [EmailAddress]
+        [DisplayName("Email")]
         public string CreatorEmail { get; set; }
 
         [Required]
         [MaxLength(512)]
+        [DisplayName("Описание заявки")]
         public string Description { get; set; }
 
         [Required]
+        [DisplayName("Статус")]
         public ConsultingTaskStatus? Status { get; set; }
 
         [Required]
+        [DisplayName("Вид услуги")]
         public CompanyService? CompanyService { get; set; }
 
 

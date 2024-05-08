@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 using Consulting.API.Data.Repos;
+using Consulting.API.Services;
 using Consulting.Models;
 
 using Microsoft.AspNetCore.Authorization;
@@ -13,9 +15,18 @@ namespace Consulting.API.Controllers {
     [Authorize(Helpers.Constants.Strings.AuthPolicy.AdminPolicy)]
     public class BlogPostsController : ControllerBase {
         private readonly IRepository<BlogPost> _repository;
+        private readonly ImageValidator _imageValidator;
+        private readonly int _photoMaxLength;
+        private const int _photoHeight = 225;
+        private const int _photoWidth = 400;
 
-        public BlogPostsController(IRepository<BlogPost> repository) {
+        public BlogPostsController(IRepository<BlogPost> repository, ImageValidator imageValidator) {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _imageValidator = imageValidator ?? throw new ArgumentNullException(nameof(imageValidator));
+            _photoMaxLength = typeof(BlogPost)
+                .GetProperty(nameof(BlogPost.Photo))!
+                .GetCustomAttribute<MaxLengthAttribute>()!
+                .Length;
         }
 
 
@@ -35,7 +46,11 @@ namespace Consulting.API.Controllers {
         [HttpPost("Create")]
         public async Task<IActionResult> Create([FromBody] BlogPost item) {
             if(item is null) { return BadRequest(); }
-
+            if(!_imageValidator.ImageIsValid(item.Photo ?? Array.Empty<byte>(), _photoWidth, _photoHeight, _photoMaxLength)) {
+                return BadRequest(
+                    $"Photo size must be not greater than {_photoMaxLength / 1024} KB, " +
+                    $"width must be {_photoWidth}, height must be {_photoHeight}");
+            }
             try {
                 await _repository.AddAsync(item);
                 return Ok();
@@ -47,7 +62,11 @@ namespace Consulting.API.Controllers {
         [HttpPut("Update/{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] BlogPost item) {
             if(item is null || id != item.Id || id < 1) { return BadRequest(); }
-
+            if(!_imageValidator.ImageIsValid(item.Photo ?? Array.Empty<byte>(), _photoWidth, _photoHeight)) {
+                return BadRequest(
+                    $"Photo size must be not greater than {_photoMaxLength / 1024} KB, " +
+                    $"width must be {_photoWidth}, height must be {_photoHeight}");
+            }
             try {
                 var existItem = await _repository.GetAsync(item.Id);
                 if(existItem is null) {

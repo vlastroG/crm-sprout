@@ -47,6 +47,12 @@ namespace Consulting.API.Data {
                     Name = "Отменена"
                 }
             );
+            builder.Entity<CompanyService>().HasData(
+                new CompanyService() {
+                    Id = 1,
+                    Name = "Техническая поддержка",
+                    Description = "Консультации пользователей и администраторов систем"
+                });
 
             base.OnModelCreating(builder);
         }

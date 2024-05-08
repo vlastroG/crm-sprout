@@ -129,6 +129,14 @@ namespace Consulting.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CompanyServices");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Консультации пользователей и администраторов систем",
+                            Name = "Техническая поддержка"
+                        });
                 });
 
             modelBuilder.Entity("Consulting.Models.CompanyStatement", b =>

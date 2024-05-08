@@ -1,0 +1,21 @@
+﻿@page
+@model Microsoft.AspNetCore.Identity.UI.V5.Pages.Account.Internal.AccessDeniedModel
+@inject IWebHostEnvironment environment
+@{
+    ViewData["Title"] = "Доступ запрещен";
+}
+
+<header>
+    <h1 class="text-danger">@ViewData["Title"]</h1>
+    <p class="text-danger">У вас нет доступа к этому ресурсу.</p>
+</header>
+
+@if (environment.IsDevelopment())
+{
+    <p>
+        Чтобы сделать текущего пользователя администратором, надо добавить
+        в базу данных Consulting.db
+        в таблицу AspNetUserClaims
+        запись c ClaimType = "admin_access", ClaimValue = "true"
+    </p>
+}

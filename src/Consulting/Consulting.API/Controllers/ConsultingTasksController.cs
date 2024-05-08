@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 
 namespace Consulting.API.Controllers {
-    [Route("api/Tasks")]
+    [Route("api/[controller]")]
     [ApiController]
     [Authorize(Helpers.Constants.Strings.AuthPolicy.AdminPolicy)]
     public class ConsultingTasksController : ControllerBase {
@@ -78,12 +78,6 @@ namespace Consulting.API.Controllers {
             } else {
                 return BadRequest();
             }
-        }
-
-        [HttpDelete("Delete/{id}")]
-        public async Task<IActionResult> Delete(int id) {
-            bool success = await _repository.RemoveAsync(id);
-            return success ? Ok() : NotFound();
         }
     }
 }

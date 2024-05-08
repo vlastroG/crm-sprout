@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Consulting.Models.ConsultingTask>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Поступившие заявки</h1>
+<form asp-action="Index" method="get">
+    <div class="form-group">
+        <input type="date" name="start" />
+        <input type="date" name="end" />
+        <input type="submit" value="Отфильтровать" />
+        <a asp-action="Index">Сбросить фильтр</a>
+    </div>
+</form>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatorName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CompanyService)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatorEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatorName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CompanyService!.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatorEmail)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status!.Name)
+                </td>
+                <td>
+                    @Html.ActionLink("Редактировать", "Edit", new { Id = item.Id }) |
+                    @Html.ActionLink("Подробности", "Details", new { Id = item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

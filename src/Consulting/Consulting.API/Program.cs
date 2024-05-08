@@ -2,6 +2,7 @@
 using Consulting.API.Auth;
 using Consulting.API.Data;
 using Consulting.API.Data.Repos;
+using Consulting.API.Services;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -22,6 +23,7 @@ namespace Consulting.API {
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddRepositories();
+            builder.Services.AddSingleton<ImageValidator>();
             builder.Services.AddIdentityCore<ApplicationUser>(o => {
                 o.Password.RequireDigit = false;
                 o.Password.RequiredLength = 8;

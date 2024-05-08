@@ -1,0 +1,28 @@
+﻿@using System.IdentityModel.Tokens.Jwt
+
+<ul class="navbar-nav">
+    @if (!string.IsNullOrWhiteSpace(Context.Session.GetString(Consulting.WebClient.Helpers.Constants.TokenName)))
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark">
+                @{
+                    var token = new JwtSecurityToken(Context.Session.GetString(Consulting.WebClient.Helpers.Constants.TokenName));
+                    @token.Subject
+                }
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Home" asp-action="Logout">Выйти</a>
+        </li>
+    } else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity"
+               asp-page="/Account/Register">Зарегистрироваться</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity"
+               asp-page="/Account/Login">Войти</a>
+        </li>
+    }
+</ul>
