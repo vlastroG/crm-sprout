@@ -16,13 +16,18 @@ namespace Consulting.WebClient.Controllers {
 
 
         [HttpGet]
-        public async Task<IActionResult> Index() {
+        public async Task<IActionResult> Index(DateTime? start, DateTime? end) {
             if(HttpContext.Session.IsAdminUser()) {
                 using HttpClient client = _httpClientFactory.CreateClient();
                 AddAuthenticationHeader(client);
                 var consultingTasks = await client.GetFromJsonAsync<IEnumerable<ConsultingTask>>(
                     Constants.ConsultingTasksUri);
-
+                if(start is not null && end is not null) {
+                    var filteredTasks = consultingTasks!
+                        .Where(t => start <= t.CreationDate && t.CreationDate <= (end + TimeSpan.FromDays(1)))
+                        .ToArray();
+                    return View(filteredTasks);
+                }
                 return View(consultingTasks);
             } else {
                 return RedirectToAccessDenied();
