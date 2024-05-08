@@ -1,3 +1,5 @@
+using System.Net;
+
 using Consulting.Models;
 using Consulting.WebClient.Helpers;
 using Consulting.WebClient.Models;
@@ -20,7 +22,8 @@ namespace Consulting.WebClient.Controllers {
         [HttpGet]
         public async Task<IActionResult> Index() {
             using HttpClient client = _httpClientFactory.CreateClient();
-            var consultingProjects = await client.GetFromJsonAsync<IEnumerable<ConsultingProject>>(Helpers.Constants.ConsultingProjectsUri);
+            var consultingProjects = await client.GetFromJsonAsync<IEnumerable<ConsultingProject>>(
+                Constants.ConsultingProjectsUri);
 
             return View(consultingProjects);
         }
@@ -31,7 +34,8 @@ namespace Consulting.WebClient.Controllers {
                 return NotFound();
             }
             using HttpClient client = _httpClientFactory.CreateClient();
-            var consultingProject = await client.GetFromJsonAsync<ConsultingProject>(Helpers.Constants.ConsultingProjectsUri + id);
+            var consultingProject = await client.GetFromJsonAsync<ConsultingProject>(
+                Constants.ConsultingProjectsUri + id);
             if(consultingProject is null) {
                 return NotFound();
             }
@@ -50,7 +54,8 @@ namespace Consulting.WebClient.Controllers {
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Photo")] ProjectViewModel consultingProjectViewModel) {
+        public async Task<IActionResult> Create(
+            [Bind("Id,Name,Description,Photo")] ProjectViewModel consultingProjectViewModel) {
             if(HttpContext.Session.IsAdminUser()) {
                 if(ModelState.IsValid) {
                     using HttpClient client = _httpClientFactory.CreateClient();
@@ -61,16 +66,21 @@ namespace Consulting.WebClient.Controllers {
                         Photo = await _formFileConverter.ConvertToByteArray(consultingProjectViewModel.Photo)
                     };
 
-                    var response = await client.PostAsJsonAsync(Constants.ConsultingProjectsUri + Constants.Create, project);
-                    if(response.IsSuccessStatusCode) {
-                        return RedirectToAction(nameof(Index));
-                    } else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden) {
-                        return RedirectToAccessDenied();
-                    } else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized) {
-                        return RedirectToLogin();
-                    } else {
-                        ModelState.AddModelError(nameof(ProjectViewModel.Photo), "Image must be jpeg 225x400 px no greater than 128 KB");
-                        return View(consultingProjectViewModel);
+                    var response = await client.PostAsJsonAsync(
+                        Constants.ConsultingProjectsUri + Constants.Create, project);
+                    switch(response.StatusCode) {
+                        case HttpStatusCode.OK:
+                            return RedirectToAction(nameof(Index));
+                        case HttpStatusCode.Forbidden:
+                            return RedirectToAccessDenied();
+                        case HttpStatusCode.Unauthorized:
+                            return RedirectToLogin();
+                        default: {
+                            ModelState.AddModelError(
+                                nameof(ProjectViewModel.Photo),
+                                "Image must be jpeg 225x400 px no greater than 128 KB");
+                            return View(consultingProjectViewModel);
+                        }
                     }
                 }
                 return View(consultingProjectViewModel);
@@ -86,7 +96,8 @@ namespace Consulting.WebClient.Controllers {
 
                 using HttpClient client = _httpClientFactory.CreateClient();
                 AddAuthenticationHeader(client);
-                var consultingProject = await client.GetFromJsonAsync<ConsultingProject>(Constants.ConsultingProjectsUri + id);
+                var consultingProject = await client.GetFromJsonAsync<ConsultingProject>(
+                    Constants.ConsultingProjectsUri + id);
                 if(consultingProject is null) {
                     return NotFound();
                 }
@@ -94,7 +105,7 @@ namespace Consulting.WebClient.Controllers {
                     Id = consultingProject.Id,
                     Name = consultingProject.Name,
                     Description = consultingProject.Description,
-                    ExistPhoto = System.Convert.ToBase64String(consultingProject.Photo ?? Array.Empty<byte>())
+                    ExistPhoto = Convert.ToBase64String(consultingProject.Photo ?? Array.Empty<byte>())
                 };
                 return View(projectViewModel);
             } else {
@@ -105,7 +116,9 @@ namespace Consulting.WebClient.Controllers {
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ExistPhoto,Photo")] ProjectViewModel consultingProjectViewModel) {
+        public async Task<IActionResult> Edit(
+            int id,
+            [Bind("Id,Name,Description,ExistPhoto,Photo")] ProjectViewModel consultingProjectViewModel) {
             if(HttpContext.Session.IsAdminUser()) {
                 if(id != consultingProjectViewModel.Id) {
                     return NotFound();
@@ -122,18 +135,23 @@ namespace Consulting.WebClient.Controllers {
                         ? await _formFileConverter.ConvertToByteArray(consultingProjectViewModel.Photo)
                         : Convert.FromBase64String(consultingProjectViewModel.ExistPhoto ?? string.Empty)
                     };
-                    var response = await client.PutAsJsonAsync(Constants.ConsultingProjectsUri + Constants.Update + id, consultingProject);
-                    if(response.IsSuccessStatusCode) {
-                        return RedirectToAction(nameof(Index));
-                    } else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden) {
-                        return RedirectToAccessDenied();
-                    } else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized) {
-                        return RedirectToLogin();
-                    } else if(response.StatusCode == System.Net.HttpStatusCode.NotFound) {
-                        return NotFound();
-                    } else {
-                        ModelState.AddModelError(nameof(ProjectViewModel.Photo), "Image must be jpeg 225x400 px no greater than 128 KB");
-                        return View(consultingProjectViewModel);
+                    var response = await client.PutAsJsonAsync(
+                        Constants.ConsultingProjectsUri + Constants.Update + id, consultingProject);
+                    switch(response.StatusCode) {
+                        case HttpStatusCode.OK:
+                            return RedirectToAction(nameof(Index));
+                        case HttpStatusCode.Forbidden:
+                            return RedirectToAccessDenied();
+                        case HttpStatusCode.Unauthorized:
+                            return RedirectToLogin();
+                        case HttpStatusCode.NotFound:
+                            return NotFound();
+                        default: {
+                            ModelState.AddModelError(
+                                nameof(ProjectViewModel.Photo),
+                                "Image must be jpeg 225x400 px no greater than 128 KB");
+                            return View(consultingProjectViewModel);
+                        }
                     }
                 }
                 return View(consultingProjectViewModel);
@@ -152,7 +170,8 @@ namespace Consulting.WebClient.Controllers {
 
                 using HttpClient client = _httpClientFactory.CreateClient();
                 AddAuthenticationHeader(client);
-                var consultingProject = await client.GetFromJsonAsync<ConsultingProject>(Constants.ConsultingProjectsUri + id);
+                var consultingProject = await client.GetFromJsonAsync<ConsultingProject>(
+                    Constants.ConsultingProjectsUri + id);
                 if(consultingProject is null) { return NotFound(); }
                 return View(consultingProject);
             } else {
@@ -167,15 +186,12 @@ namespace Consulting.WebClient.Controllers {
                 using HttpClient client = _httpClientFactory.CreateClient();
                 AddAuthenticationHeader(client);
                 var response = await client.DeleteAsync(Constants.ConsultingProjectsUri + Constants.Delete + id);
-                if(response.IsSuccessStatusCode) {
-                    return RedirectToAction(nameof(Index));
-                } else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden) {
-                    return RedirectToAccessDenied();
-                } else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized) {
-                    return RedirectToLogin();
-                } else {
-                    return NotFound();
-                }
+                return response.StatusCode switch {
+                    HttpStatusCode.OK => RedirectToAction(nameof(Index)),
+                    HttpStatusCode.Forbidden => RedirectToAccessDenied(),
+                    HttpStatusCode.Unauthorized => RedirectToLogin(),
+                    _ => NotFound()
+                };
             } else {
                 return RedirectToAccessDenied();
             }

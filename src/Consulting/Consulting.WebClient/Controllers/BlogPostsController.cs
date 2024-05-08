@@ -1,3 +1,5 @@
+using System.Net;
+
 using Consulting.Models;
 using Consulting.WebClient.Helpers;
 using Consulting.WebClient.Models;
@@ -49,7 +51,8 @@ namespace Consulting.WebClient.Controllers {
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,ContentShort,ContentFull,Photo")] BlogPostViewModel blogPostViewModel) {
+        public async Task<IActionResult> Create(
+            [Bind("Id,Name,ContentShort,ContentFull,Photo")] BlogPostViewModel blogPostViewModel) {
             if(HttpContext.Session.IsAdminUser()) {
                 if(ModelState.IsValid) {
                     using HttpClient client = _httpClientFactory.CreateClient();
@@ -62,18 +65,21 @@ namespace Consulting.WebClient.Controllers {
                     };
 
                     var response = await client.PostAsJsonAsync(Constants.BlogPostsUri + Constants.Create, blogPost);
-                    var text = await response.Content.ReadAsStringAsync();
-                    if(response.IsSuccessStatusCode) {
-                        return RedirectToAction(nameof(Index));
-                    } else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden) {
-                        return RedirectToAccessDenied();
-                    } else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized) {
-                        return RedirectToLogin();
-                    } else {
-                        ModelState.AddModelError(nameof(BlogPostViewModel.Photo), "Image must be jpeg 225x400 px no greater than 128 KB");
-                        return View(blogPostViewModel);
-                    }
-                }
+                    switch(response.StatusCode) {
+                        case HttpStatusCode.OK:
+                            return RedirectToAction(nameof(Index));
+                        case HttpStatusCode.Forbidden:
+                            return RedirectToAccessDenied();
+                        case HttpStatusCode.Unauthorized:
+                            return RedirectToLogin();
+                        default: {
+                            ModelState.AddModelError(
+                                nameof(BlogPostViewModel.Photo),
+                                "Image must be jpeg 225x400 px no greater than 128 KB");
+                            return View(blogPostViewModel);
+                        };
+                    };
+                };
                 return View(blogPostViewModel);
             } else {
                 return RedirectToAccessDenied();
@@ -107,7 +113,9 @@ namespace Consulting.WebClient.Controllers {
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ContentShort,ContentFull,ExistPhoto,Photo")] BlogPostViewModel blogPostViewModel) {
+        public async Task<IActionResult> Edit(
+            int id,
+            [Bind("Id,Name,ContentShort,ContentFull,ExistPhoto,Photo")] BlogPostViewModel blogPostViewModel) {
             if(HttpContext.Session.IsAdminUser()) {
                 if(id != blogPostViewModel.Id) {
                     return NotFound();
@@ -126,17 +134,21 @@ namespace Consulting.WebClient.Controllers {
                         : Convert.FromBase64String(blogPostViewModel.ExistPhoto ?? string.Empty)
                     };
                     var response = await client.PutAsJsonAsync(Constants.BlogPostsUri + Constants.Update + id, blogPost);
-                    if(response.IsSuccessStatusCode) {
-                        return RedirectToAction(nameof(Index));
-                    } else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden) {
-                        return RedirectToAccessDenied();
-                    } else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized) {
-                        return RedirectToLogin();
-                    } else if(response.StatusCode == System.Net.HttpStatusCode.NotFound) {
-                        return NotFound();
-                    } else {
-                        ModelState.AddModelError(nameof(BlogPostViewModel.Photo), "Image must be jpeg 225x400 px no greater than 128 KB");
-                        return View(blogPostViewModel);
+                    switch(response.StatusCode) {
+                        case HttpStatusCode.OK:
+                            return RedirectToAction(nameof(Index));
+                        case HttpStatusCode.Forbidden:
+                            return RedirectToAccessDenied();
+                        case HttpStatusCode.Unauthorized:
+                            return RedirectToLogin();
+                        case HttpStatusCode.NotFound:
+                            return NotFound();
+                        default: {
+                            ModelState.AddModelError(
+                                nameof(BlogPostViewModel.Photo),
+                                "Image must be jpeg 225x400 px no greater than 128 KB");
+                            return View(blogPostViewModel);
+                        }
                     }
                 }
                 return View(blogPostViewModel);
@@ -170,15 +182,12 @@ namespace Consulting.WebClient.Controllers {
                 using HttpClient client = _httpClientFactory.CreateClient();
                 AddAuthenticationHeader(client);
                 var response = await client.DeleteAsync(Constants.BlogPostsUri + Constants.Delete + id);
-                if(response.IsSuccessStatusCode) {
-                    return RedirectToAction(nameof(Index));
-                } else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden) {
-                    return RedirectToAccessDenied();
-                } else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized) {
-                    return RedirectToLogin();
-                } else {
-                    return NotFound();
-                }
+                return response.StatusCode switch {
+                    HttpStatusCode.OK => RedirectToAction(nameof(Index)),
+                    HttpStatusCode.Forbidden => RedirectToAccessDenied(),
+                    HttpStatusCode.Unauthorized => RedirectToLogin(),
+                    _ => NotFound(),
+                };
             } else {
                 return RedirectToAccessDenied();
             }

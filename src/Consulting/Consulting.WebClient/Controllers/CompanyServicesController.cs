@@ -1,3 +1,5 @@
+using System.Net;
+
 using Consulting.Models;
 using Consulting.WebClient.Helpers;
 
@@ -16,7 +18,8 @@ namespace Consulting.WebClient.Controllers {
         [HttpGet]
         public async Task<IActionResult> Index() {
             using HttpClient client = _httpClientFactory.CreateClient();
-            var companyServices = await client.GetFromJsonAsync<IEnumerable<CompanyService>>(Constants.CompanyServicesUri);
+            var companyServices = await client.GetFromJsonAsync<IEnumerable<CompanyService>>(
+                Constants.CompanyServicesUri);
 
             return View(companyServices);
         }
@@ -51,16 +54,14 @@ namespace Consulting.WebClient.Controllers {
                 if(ModelState.IsValid) {
                     using HttpClient client = _httpClientFactory.CreateClient();
                     AddAuthenticationHeader(client);
-                    var response = await client.PostAsJsonAsync(Constants.CompanyServicesUri + Constants.Create, companyService);
-                    if(response.IsSuccessStatusCode) {
-                        return RedirectToAction(nameof(Index));
-                    } else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden) {
-                        return RedirectToAccessDenied();
-                    } else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized) {
-                        return RedirectToLogin();
-                    } else {
-                        return BadRequest();
-                    }
+                    var response = await client.PostAsJsonAsync(
+                        Constants.CompanyServicesUri + Constants.Create, companyService);
+                    return response.StatusCode switch {
+                        HttpStatusCode.OK => RedirectToAction(nameof(Index)),
+                        HttpStatusCode.Forbidden => RedirectToAccessDenied(),
+                        HttpStatusCode.Unauthorized => RedirectToLogin(),
+                        _ => BadRequest(),
+                    };
                 }
                 return View(companyService);
             } else {
@@ -97,16 +98,14 @@ namespace Consulting.WebClient.Controllers {
                 if(ModelState.IsValid) {
                     using HttpClient client = _httpClientFactory.CreateClient();
                     AddAuthenticationHeader(client);
-                    var response = await client.PutAsJsonAsync(Constants.CompanyServicesUri + Constants.Update + id, companyService);
-                    if(response.IsSuccessStatusCode) {
-                        return RedirectToAction(nameof(Index));
-                    } else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden) {
-                        return RedirectToAccessDenied();
-                    } else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized) {
-                        return RedirectToLogin();
-                    } else {
-                        return NotFound();
-                    }
+                    var response = await client.PutAsJsonAsync(
+                        Constants.CompanyServicesUri + Constants.Update + id, companyService);
+                    return response.StatusCode switch {
+                        HttpStatusCode.OK => RedirectToAction(nameof(Index)),
+                        HttpStatusCode.Forbidden => RedirectToAccessDenied(),
+                        HttpStatusCode.Unauthorized => RedirectToLogin(),
+                        _ => NotFound()
+                    };
                 }
                 return View(companyService);
             } else {
@@ -139,15 +138,12 @@ namespace Consulting.WebClient.Controllers {
                 using HttpClient client = _httpClientFactory.CreateClient();
                 AddAuthenticationHeader(client);
                 var response = await client.DeleteAsync(Constants.CompanyServicesUri + Constants.Delete + id);
-                if(response.IsSuccessStatusCode) {
-                    return RedirectToAction(nameof(Index));
-                } else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden) {
-                    return RedirectToAccessDenied();
-                } else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized) {
-                    return RedirectToLogin();
-                } else {
-                    return NotFound();
-                }
+                return response.StatusCode switch {
+                    HttpStatusCode.OK => RedirectToAction(nameof(Index)),
+                    HttpStatusCode.Forbidden => RedirectToAccessDenied(),
+                    HttpStatusCode.Unauthorized => RedirectToLogin(),
+                    _ => NotFound()
+                };
             } else {
                 return RedirectToAccessDenied();
             }
