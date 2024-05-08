@@ -1,14 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace Consulting.Models {
-    public abstract class Entity {
-        protected Entity() { }
+namespace Consulting.WebClient.Models {
+    public abstract class ValidatableViewModel {
+        protected ValidatableViewModel() {
 
-
-        [Key]
-        public int Id { get; set; }
-
+        }
 
         private protected IEnumerable<ValidationResult> ValidateTextProperties() {
             var properties = GetType()

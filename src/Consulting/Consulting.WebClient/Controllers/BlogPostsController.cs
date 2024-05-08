@@ -41,7 +41,7 @@ namespace Consulting.WebClient.Controllers {
         [HttpGet]
         public IActionResult Create() {
             if(HttpContext.Session.IsAdminUser()) {
-                return View();
+                return View(new BlogPostViewModel());
             } else {
                 return RedirectToAccessDenied();
             }
@@ -62,6 +62,7 @@ namespace Consulting.WebClient.Controllers {
                     };
 
                     var response = await client.PostAsJsonAsync(Constants.BlogPostsUri + Constants.Create, blogPost);
+                    var text = await response.Content.ReadAsStringAsync();
                     if(response.IsSuccessStatusCode) {
                         return RedirectToAction(nameof(Index));
                     } else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden) {
@@ -70,7 +71,7 @@ namespace Consulting.WebClient.Controllers {
                         return RedirectToLogin();
                     } else {
                         ModelState.AddModelError(nameof(BlogPostViewModel.Photo), "Image must be jpeg 225x400 px no greater than 128 KB");
-                        return BadRequest();
+                        return View(blogPostViewModel);
                     }
                 }
                 return View(blogPostViewModel);
@@ -90,7 +91,14 @@ namespace Consulting.WebClient.Controllers {
                 if(blogPost is null) {
                     return NotFound();
                 }
-                return View(blogPost);
+                var blogPostViewModel = new BlogPostViewModel() {
+                    Id = blogPost.Id,
+                    Name = blogPost.Name,
+                    ContentShort = blogPost.ContentShort,
+                    ContentFull = blogPost.ContentFull,
+                    ExistPhoto = Convert.ToBase64String(blogPost.Photo ?? Array.Empty<byte>())
+                };
+                return View(blogPostViewModel);
             } else {
                 return RedirectToAccessDenied();
             }
@@ -99,15 +107,24 @@ namespace Consulting.WebClient.Controllers {
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ContentShort,ContentFull,Photo")] BlogPost blogPost) {
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ContentShort,ContentFull,ExistPhoto,Photo")] BlogPostViewModel blogPostViewModel) {
             if(HttpContext.Session.IsAdminUser()) {
-                if(id != blogPost.Id) {
+                if(id != blogPostViewModel.Id) {
                     return NotFound();
                 }
 
                 if(ModelState.IsValid) {
                     using HttpClient client = _httpClientFactory.CreateClient();
                     AddAuthenticationHeader(client);
+                    var blogPost = new BlogPost() {
+                        Id = blogPostViewModel.Id,
+                        Name = blogPostViewModel.Name,
+                        ContentShort = blogPostViewModel.ContentShort,
+                        ContentFull = blogPostViewModel.ContentFull,
+                        Photo = blogPostViewModel.Photo is not null
+                        ? await _formFileConverter.ConvertToByteArray(blogPostViewModel.Photo)
+                        : Convert.FromBase64String(blogPostViewModel.ExistPhoto ?? string.Empty)
+                    };
                     var response = await client.PutAsJsonAsync(Constants.BlogPostsUri + Constants.Update + id, blogPost);
                     if(response.IsSuccessStatusCode) {
                         return RedirectToAction(nameof(Index));
@@ -115,11 +132,14 @@ namespace Consulting.WebClient.Controllers {
                         return RedirectToAccessDenied();
                     } else if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized) {
                         return RedirectToLogin();
-                    } else {
+                    } else if(response.StatusCode == System.Net.HttpStatusCode.NotFound) {
                         return NotFound();
+                    } else {
+                        ModelState.AddModelError(nameof(BlogPostViewModel.Photo), "Image must be jpeg 225x400 px no greater than 128 KB");
+                        return View(blogPostViewModel);
                     }
                 }
-                return View(blogPost);
+                return View(blogPostViewModel);
             } else {
                 return RedirectToAccessDenied();
             }

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Consulting.WebClient.Models {
 
-    public class ProjectViewModel {
+    public class ProjectViewModel : ValidatableViewModel, IValidatableObject {
         public ProjectViewModel() {
 
         }
@@ -32,5 +32,13 @@ namespace Consulting.WebClient.Models {
 
         [DisplayName("Текущее фото")]
         public string? ExistPhoto { get; set; }
+
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) {
+            var textErrors = ValidateTextProperties();
+            foreach(var error in textErrors) {
+                yield return error;
+            }
+        }
     }
 }
