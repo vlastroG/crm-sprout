@@ -1,4 +1,7 @@
-﻿@model Consulting.Models.ConsultingTask
+﻿@using Consulting.Models
+@using Consulting.WebClient.Helpers
+@model Consulting.WebClient.Models.TaskEditorViewModel
+@inject IHttpClientFactory httpClientFactory
 
 @{
     ViewData["Title"] = "Create";
@@ -26,6 +29,25 @@
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @Html.DisplayNameFor(model => model.CompanyService)
+                @{
+                    using HttpClient client = httpClientFactory.CreateClient();
+                    var consultingServices = await client.GetFromJsonAsync<IEnumerable<CompanyService>>(Constants.CompanyServicesUri);
+                    if (consultingServices is not null)
+                    {
+                        List<SelectListItem> listItems = new List<SelectListItem>();
+                        foreach (var item in consultingServices)
+                        {
+                            var listItem = new SelectListItem() { Text = item.Name, Value = item.Id.ToString() };
+                            listItems.Add(listItem);
+                        }
+                        <div class="form-group">
+                            @Html.DropDownListFor(model => model.CompanyServiceId, listItems)
+                        </div>
+                    }
+                }
             </div>
             <div class="form-group">
                 <input type="submit" value="Создать" class="btn btn-primary" />

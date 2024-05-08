@@ -1,7 +1,8 @@
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Consulting.WebClient.Models {
-    public class TaskEditorViewModel {
+    public class TaskEditorViewModel : ValidatableViewModel, IValidatableObject {
         public TaskEditorViewModel() {
 
         }
@@ -10,12 +11,18 @@ namespace Consulting.WebClient.Models {
         [DisplayName("Дата создания")]
         public DateTime CreationDate { get; set; }
 
+        [Required]
+        [MaxLength(64)]
         [DisplayName("ФИО")]
         public string CreatorName { get; set; } = string.Empty;
 
+        [Required]
+        [EmailAddress]
         [DisplayName("Email")]
         public string CreatorEmail { get; set; } = string.Empty;
 
+        [Required]
+        [MaxLength(512)]
         [DisplayName("Описание заявки")]
         public string Description { get; set; } = string.Empty;
 
@@ -30,5 +37,13 @@ namespace Consulting.WebClient.Models {
 
         [DisplayName("Статус")]
         public int StatusId { get; set; }
+
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) {
+            var textErrors = ValidateTextProperties();
+            foreach(var error in textErrors) {
+                yield return error;
+            }
+        }
     }
 }

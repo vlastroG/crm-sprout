@@ -35,13 +35,13 @@
             @Html.DisplayFor(model => model.CreatorEmail)
         </dd>
         <dt class="col-sm-2">
-            Статус
+            @Html.DisplayNameFor(model => model.Status)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Status!.Name)
         </dd>
         <dt class="col-sm-2">
-            Вид услуги
+            @Html.DisplayNameFor(model => model.CompanyService)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CompanyService!.Name)

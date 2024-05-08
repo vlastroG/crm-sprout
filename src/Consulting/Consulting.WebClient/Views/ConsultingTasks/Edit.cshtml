@@ -1,6 +1,7 @@
 ﻿@using Consulting.Models
 @using Consulting.WebClient.Helpers
 @model Consulting.WebClient.Models.TaskEditorViewModel
+@inject IHttpClientFactory httpClientFactory
 
 @{
     ViewData["Title"] = "Edit";
@@ -58,9 +59,13 @@
         </dl>
         <form asp-action="Edit">
             <input type="hidden" asp-for="ConsultingTaskId" />
+            <input type="hidden" asp-for="CreatorName" />
+            <input type="hidden" asp-for="CreatorEmail" />
+            <input type="hidden" asp-for="Description" />
             @{
-                bool success = Context.Items.TryGetValue(Constants.ConsultingTaskStatusesUri, out object? valueModel);
-                if (success && valueModel is IEnumerable<ConsultingTaskStatus> statuses)
+                using HttpClient client = httpClientFactory.CreateClient();
+                var statuses = await client.GetFromJsonAsync<IEnumerable<ConsultingTaskStatus>>(Constants.ConsultingTaskStatusesUri);
+                if (statuses is not null)
                 {
                     List<SelectListItem> listItems = new List<SelectListItem>();
                     foreach (var item in statuses)
