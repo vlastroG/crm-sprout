@@ -4,6 +4,8 @@ namespace Consulting.Desktop.ViewModels {
     internal static class ViewModelsRegistrator {
         internal static IServiceCollection AddViewModels(this IServiceCollection services) => services
             .AddSingleton<MainWindowViewModel>()
+            .AddTransient<AnonymMainViewModel>()
+            .AddTransient<AdminMainViewModel>()
             ;
     }
 }

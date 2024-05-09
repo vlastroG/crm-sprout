@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:Consulting.Desktop.Views"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:vm="clr-namespace:Consulting.Desktop.ViewModels"
@@ -16,7 +17,255 @@
         MinWidth="500"
         d:DataContext="{d:DesignInstance vm:MainWindowViewModel, IsDesignTimeCreatable=False}"
         WindowStartupLocation="CenterScreen">
-    <Grid>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding UpdateCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Window.Resources>
+        <Style TargetType="Button"
+               x:Key="AnonButton"
+               BasedOn="{StaticResource MaterialDesignFlatDarkButton}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Text, ElementName=UserName}"
+                             Value="{x:Static sys:String.Empty}">
+                    <Setter Property="Visibility"
+                            Value="Visible" />
+                </DataTrigger>
+            </Style.Triggers>
+            <Setter Property="Visibility"
+                    Value="Collapsed" />
+        </Style>
+        <Style TargetType="Button"
+               x:Key="NotAnonButton"
+               BasedOn="{StaticResource MaterialDesignFlatDarkButton}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Text, ElementName=UserName}"
+                             Value="{x:Static sys:String.Empty}">
+                    <Setter Property="Visibility"
+                            Value="Collapsed" />
+                </DataTrigger>
+            </Style.Triggers>
+            <Setter Property="Visibility"
+                    Value="Visible" />
+        </Style>
+        <Style TargetType="DockPanel"
+               x:Key="SpinnerContainer">
+            <Setter Property="Visibility"
+                    Value="Collapsed" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.CommandExecuting}"
+                             Value="True">
+                    <Setter Property="Visibility"
+                            Value="Visible" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="StackPanel"
+               x:Key="ButtonsContainer">
+            <Setter Property="Visibility"
+                    Value="Visible" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.CommandExecuting}"
+                             Value="True">
+                    <Setter Property="Visibility"
+                            Value="Collapsed" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
 
-    </Grid>
+        <!--Login popup-->
+        <DataTemplate DataType="{x:Type helpers:LoginPopup}">
+            <StackPanel Width="350"
+                        VerticalAlignment="Bottom"
+                        Margin="25">
+
+                <TextBox materialDesign:HintAssist.Hint="email"
+                         HorizontalContentAlignment="Center"
+                         IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.CommandExecuting, Converter={StaticResource InvertBooleanConverter}}"
+                         Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.Email}">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type materialDesign:SmartHint}">
+                            <Setter Property="HorizontalAlignment"
+                                    Value="Center" />
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <PasswordBox x:Name="PasswordBox"
+                             materialDesign:HintAssist.Hint="пароль"
+                             Margin="0 25"
+                             HorizontalContentAlignment="Center"
+                             IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.CommandExecuting, Converter={StaticResource InvertBooleanConverter}}">
+                    <PasswordBox.Resources>
+                        <Style TargetType="{x:Type materialDesign:SmartHint}">
+                            <Setter Property="HorizontalAlignment"
+                                    Value="Center" />
+                        </Style>
+                    </PasswordBox.Resources>
+                </PasswordBox>
+                <DockPanel Style="{StaticResource SpinnerContainer}"
+                           Height="65">
+                    <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                 IsIndeterminate="True"
+                                 VerticalAlignment="Center"
+                                 Height="50"
+                                 Width="50" />
+                </DockPanel>
+                <StackPanel Style="{StaticResource ButtonsContainer}">
+                    <Button Content="Войти"
+                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.LoginCommand}"
+                            CommandParameter="{Binding ElementName=PasswordBox}"
+                            IsDefault="True" />
+                    <Button  Margin="0 5 0 0"
+                             Content="Закрыть"
+                             IsCancel="True">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <i:InvokeCommandAction Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" />
+                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.UpdateCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+
+        <!--Registration popup-->
+        <DataTemplate DataType="{x:Type helpers:RegisterPopup}">
+            <StackPanel Width="350"
+                        VerticalAlignment="Bottom"
+                        Margin="25">
+
+                <TextBox materialDesign:HintAssist.Hint="example@example.com"
+                         HorizontalContentAlignment="Center"
+                         IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.CommandExecuting, Converter={StaticResource InvertBooleanConverter}}"
+                         Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.Email}">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type materialDesign:SmartHint}">
+                            <Setter Property="HorizontalAlignment"
+                                    Value="Center" />
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <PasswordBox x:Name="PasswordBox"
+                             materialDesign:HintAssist.Hint="пароль (от 8 символов)"
+                             Margin="0 25"
+                             HorizontalContentAlignment="Center"
+                             IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.CommandExecuting, Converter={StaticResource InvertBooleanConverter}}">
+                    <PasswordBox.Resources>
+                        <Style TargetType="{x:Type materialDesign:SmartHint}">
+                            <Setter Property="HorizontalAlignment"
+                                    Value="Center" />
+                        </Style>
+                    </PasswordBox.Resources>
+                </PasswordBox>
+                <DockPanel Style="{StaticResource SpinnerContainer}"
+                           Height="65">
+                    <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                 IsIndeterminate="True"
+                                 VerticalAlignment="Center"
+                                 Height="50"
+                                 Width="50" />
+                </DockPanel>
+                <StackPanel Style="{StaticResource ButtonsContainer}">
+                    <Button Content="Зарегистрироваться"
+                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.RegisterCommand}"
+                            CommandParameter="{Binding ElementName=PasswordBox}"
+                            IsDefault="True" />
+                    <Button  Margin="0 5 0 0"
+                             Content="Закрыть"
+                             IsCancel="True">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <i:InvokeCommandAction Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" />
+                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.UpdateCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+
+    <materialDesign:DialogHost Identifier="RootDialog">
+        <Grid Background="WhiteSmoke">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid Height="40"
+                  Grid.Row="0"
+                  Background="LightGray">
+                <DockPanel>
+                    <Button Content="Обновить"
+                            Background="{x:Null}"
+                            BorderBrush="{x:Null}"
+                            Foreground="DarkSlateGray"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource MaterialDesignFlatDarkButton}"
+                            Command="{Binding UpdateCommand}" />
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                Margin="20 0">
+                        <Button Content="Регистрация"
+                                Background="{x:Null}"
+                                BorderBrush="{x:Null}"
+                                Foreground="DarkSlateGray"
+                                FontSize="15"
+                                FontWeight="Bold"
+                                VerticalAlignment="Center"
+                                IsEnabled="{Binding CommandExecuting, Converter={StaticResource InvertBooleanConverter}}"
+                                Style="{StaticResource AnonButton}"
+                                Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}">
+                            <Button.CommandParameter>
+                                <helpers:RegisterPopup />
+                            </Button.CommandParameter>
+                        </Button>
+                        <Button Content="Вход"
+                                Background="{x:Null}"
+                                BorderBrush="{x:Null}"
+                                Foreground="DarkSlateGray"
+                                FontSize="15"
+                                FontWeight="Bold"
+                                VerticalAlignment="Center"
+                                IsEnabled="{Binding CommandExecuting, Converter={StaticResource InvertBooleanConverter}}"
+                                Style="{StaticResource AnonButton}"
+                                Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}">
+                            <Button.CommandParameter>
+                                <helpers:LoginPopup />
+                            </Button.CommandParameter>
+                        </Button>
+                        <TextBlock Text="{Binding UserName}"
+                                   x:Name="UserName"
+                                   Background="{x:Null}"
+                                   Foreground="DarkSlateGray"
+                                   FontSize="15"
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Center" />
+                        <Button Content="Выход"
+                                Background="{x:Null}"
+                                BorderBrush="{x:Null}"
+                                Foreground="DarkSlateGray"
+                                FontSize="15"
+                                FontWeight="Bold"
+                                VerticalAlignment="Center"
+                                IsEnabled="{Binding CommandExecuting, Converter={StaticResource InvertBooleanConverter}}"
+                                Style="{StaticResource NotAnonButton}"
+                                Command="{Binding LogoutCommand}" />
+                    </StackPanel>
+                </DockPanel>
+            </Grid>
+            <ContentControl Grid.Row="1"
+                            Content="{
+                Binding SelectedViewModel, 
+                UpdateSourceTrigger=PropertyChanged, 
+                NotifyOnValidationError=True, 
+                ValidatesOnDataErrors=True}">
+            </ContentControl>
+        </Grid>
+    </materialDesign:DialogHost>
 </Window>

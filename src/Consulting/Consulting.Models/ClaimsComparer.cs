@@ -1,8 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 
-namespace Consulting.WebClient.Helpers {
-    internal class ClaimsComparer : IEqualityComparer<Claim> {
+namespace Consulting.Models {
+    public class ClaimsComparer : IEqualityComparer<Claim> {
         public bool Equals(Claim? x, Claim? y) {
             if(ReferenceEquals(x, null) || ReferenceEquals(y, null)) {
                 return false;

@@ -3,4 +3,11 @@
                     xmlns:vm="clr-namespace:Consulting.Desktop.ViewModels"
                     xmlns:view="clr-namespace:Consulting.Desktop.Views">
     
+    <DataTemplate DataType="{x:Type vm:AnonymMainViewModel}">
+        <view:AnonymMainView DataContext="{Binding}" />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:AdminMainViewModel}">
+        <view:AdminMainView DataContext="{Binding}" />
+    </DataTemplate>
 </ResourceDictionary>
