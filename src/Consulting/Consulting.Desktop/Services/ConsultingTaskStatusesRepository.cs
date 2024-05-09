@@ -9,7 +9,7 @@ namespace Consulting.Desktop.Services {
             : base(accountService, httpClientFactory) { }
 
 
-        private protected override string Url => Constants.ConsultingTasksUri;
+        private protected override string Url => Constants.ConsultingTaskStatusesUri;
 
 
         public override Task<bool> Create(ConsultingTaskStatus item) {
