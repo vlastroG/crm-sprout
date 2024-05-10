@@ -10,6 +10,13 @@ namespace Consulting.Desktop.Commands {
             _canExecute = canExecute;
         }
 
+        /// <exception cref="ArgumentNullException"></exception>
+        public RelayCommand(Action execute, Func<bool>? canExecute = default) {
+            if(execute is null) { throw new ArgumentNullException(nameof(execute)); }
+            _execute = p => execute();
+            _canExecute = canExecute is not null ? p => canExecute() : default;
+        }
+
 
         public override bool CanExecute(object? parameter) => _canExecute?.Invoke(parameter!) ?? true;
 
