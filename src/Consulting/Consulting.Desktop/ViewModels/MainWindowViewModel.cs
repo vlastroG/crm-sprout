@@ -36,9 +36,9 @@ namespace Consulting.Desktop.ViewModels {
         }
 
 
-        private BaseViewModel _selectedViewModel;
+        private BaseViewModel? _selectedViewModel;
 
-        public BaseViewModel SelectedViewModel {
+        public BaseViewModel? SelectedViewModel {
             get => _selectedViewModel;
             set => Set(ref _selectedViewModel, value);
         }
@@ -195,13 +195,14 @@ namespace Consulting.Desktop.ViewModels {
             ShowPage<AnonymContactsViewModel>();
         }
 
-        private void ShowPage<T>() where T : BaseViewModel {
+        private void ShowPage<T>() where T : UpdatableViewModel {
             UserName = _accountService.GetUserName();
             var viewModel = _serviceProvider.GetRequiredService<T>();
+            viewModel.UpdateCommand?.Execute(null);
             SelectedViewModel = viewModel;
         }
 
-        private void ShowPage<TAdmin, TAnon>() where TAdmin : BaseViewModel where TAnon : BaseViewModel {
+        private void ShowPage<TAdmin, TAnon>() where TAdmin : UpdatableViewModel where TAnon : UpdatableViewModel {
             switch(_accountService.GetUserRole()) {
                 case UserRoles.Admin:
                     ShowPage<TAdmin>();

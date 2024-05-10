@@ -1,11 +1,11 @@
 namespace Consulting.Desktop.Commands {
-    public class RelayCommand : BaseCommand {
-        private readonly Action<object> _execute;
-        private readonly Func<object, bool>? _canExecute;
+    public class RelayCommand<T> : BaseCommand<T> {
+        private readonly Action<T> _execute;
+        private readonly Func<T, bool>? _canExecute;
 
 
         /// <exception cref="ArgumentNullException"></exception>
-        public RelayCommand(Action<object> execute, Func<object, bool>? canExecute = null) : base() {
+        public RelayCommand(Action<T> execute, Func<T, bool>? canExecute = null) : base() {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
         }
@@ -18,12 +18,18 @@ namespace Consulting.Desktop.Commands {
         }
 
 
-        public override bool CanExecute(object? parameter) => _canExecute?.Invoke(parameter!) ?? true;
+        public override bool CanExecute(T? parameter) => _canExecute?.Invoke(parameter!) ?? true;
 
-        public override void Execute(object? parameter) {
+        public override void Execute(T? parameter) {
             if(!CanExecute(parameter))
                 return;
             _execute(parameter!);
+        }
+    }
+
+    public class RelayCommand : RelayCommand<object> {
+        public RelayCommand(Action execute, Func<bool>? canExecute = default) : base(execute, canExecute) {
+
         }
     }
 }

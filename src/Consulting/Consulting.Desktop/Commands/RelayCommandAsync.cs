@@ -58,4 +58,10 @@ namespace Consulting.Desktop.Commands {
             }
         }
     }
+
+    public class RelayCommandAsync : RelayCommandAsync<object> {
+        public RelayCommandAsync(Func<Task> execute, Func<bool>? canExecute = default) : base(execute, canExecute) {
+
+        }
+    }
 }

@@ -24,24 +24,6 @@
     </i:Interaction.Triggers>
     <Window.Resources>
         <Style TargetType="Button"
-               x:Key="MenuButton"
-               BasedOn="{StaticResource MaterialDesignFlatDarkButton}">
-            <Setter Property="Background"
-                    Value="{x:Null}" />
-            <Setter Property="BorderBrush"
-                    Value="{x:Null}" />
-            <Setter Property="Foreground"
-                    Value="DarkSlateGray" />
-            <Setter Property="FontSize"
-                    Value="15" />
-            <Setter Property="FontWeight"
-                    Value="Bold" />
-            <Setter Property="HorizontalAlignment"
-                    Value="Left" />
-            <Setter Property="VerticalAlignment"
-                    Value="Center" />
-        </Style>
-        <Style TargetType="Button"
                x:Key="AnonButton"
                BasedOn="{StaticResource MenuButton}">
             <Style.Triggers>
@@ -283,9 +265,7 @@
             <ContentControl Grid.Row="1"
                             Content="{
                 Binding SelectedViewModel, 
-                UpdateSourceTrigger=PropertyChanged, 
-                NotifyOnValidationError=True, 
-                ValidatesOnDataErrors=True}">
+                UpdateSourceTrigger=PropertyChanged}">
             </ContentControl>
         </Grid>
     </materialDesign:DialogHost>

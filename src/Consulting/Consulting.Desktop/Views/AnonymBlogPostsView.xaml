@@ -1,14 +1,54 @@
 ﻿<UserControl x:Class="Consulting.Desktop.Views.AnonymBlogPostsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Consulting.Desktop.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:vm="clr-namespace:Consulting.Desktop.ViewModels"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:converters="clr-namespace:Consulting.Desktop.Converters"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="900"
+             d:Background="White"
+             d:DataContext="{d:DesignInstance vm:AnonymBlogPostsViewModel, IsDesignTimeCreatable=False}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converters:ByteArrayToImageConverter x:Key="ByteArrayToImageConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
-        <TextBlock Text="AnonymBlogPostsView"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center" />
+        <DataGrid ItemsSource="{Binding Entities}">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Фото"
+                                        Width="400">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding Photo, Converter={StaticResource ByteArrayToImageConverter}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Заголовок"
+                                    Width="1*"
+                                    Binding="{Binding Name}"
+                                    ElementStyle="{StaticResource WrappedText}" />
+                <DataGridTextColumn Header="Контент сокращенно"
+                                    Width="2*"
+                                    Binding="{Binding ContentShort}"
+                                    ElementStyle="{StaticResource WrappedText}">
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Width="1*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Style="{StaticResource CrudButton}"
+                                    Content="Подробности"
+                                    Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}},Path=DataContext.ShowDetailsCommand}"
+                                    CommandParameter="{Binding}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>
