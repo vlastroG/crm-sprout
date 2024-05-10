@@ -11,7 +11,6 @@ namespace Consulting.Desktop.ViewModels {
             .AddTransient<AnonymBlogPostsViewModel>()
             .AddSingleton<AnonymContactsViewModel>()
 
-            .AddTransient<AdminMainViewModel>()
             .AddTransient<AdminConsultingTasksViewModel>()
             .AddTransient<AdminConsultingProjectsViewModel>()
             .AddTransient<AdminCompanyServicesViewModel>()

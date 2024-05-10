@@ -11,7 +11,6 @@ namespace Consulting.Desktop.Views {
             .AddTransient<AnonymCompanyServicesView>()
             .AddTransient<AnonymConsultingProjectsView>()
 
-            .AddTransient<AdminMainView>()
             .AddTransient<AdminBlogPostsView>()
             .AddTransient<AdminCompanyServicesView>()
             .AddTransient<AdminConsultingProjectsView>()

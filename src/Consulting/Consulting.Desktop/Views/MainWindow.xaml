@@ -12,20 +12,38 @@
         mc:Ignorable="d"
         Title="MainWindow"
         Height="450"
-        Width="800"
+        Width="900"
         MinHeight="350"
-        MinWidth="500"
+        MinWidth="900"
         d:DataContext="{d:DesignInstance vm:MainWindowViewModel, IsDesignTimeCreatable=False}"
         WindowStartupLocation="CenterScreen">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding UpdateCommand}" />
+            <i:InvokeCommandAction Command="{Binding ShowMainPageCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Window.Resources>
         <Style TargetType="Button"
-               x:Key="AnonButton"
+               x:Key="MenuButton"
                BasedOn="{StaticResource MaterialDesignFlatDarkButton}">
+            <Setter Property="Background"
+                    Value="{x:Null}" />
+            <Setter Property="BorderBrush"
+                    Value="{x:Null}" />
+            <Setter Property="Foreground"
+                    Value="DarkSlateGray" />
+            <Setter Property="FontSize"
+                    Value="15" />
+            <Setter Property="FontWeight"
+                    Value="Bold" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+        </Style>
+        <Style TargetType="Button"
+               x:Key="AnonButton"
+               BasedOn="{StaticResource MenuButton}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Text, ElementName=UserName}"
                              Value="{x:Static sys:String.Empty}">
@@ -38,7 +56,7 @@
         </Style>
         <Style TargetType="Button"
                x:Key="NotAnonButton"
-               BasedOn="{StaticResource MaterialDesignFlatDarkButton}">
+               BasedOn="{StaticResource MenuButton}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Text, ElementName=UserName}"
                              Value="{x:Static sys:String.Empty}">
@@ -48,6 +66,19 @@
             </Style.Triggers>
             <Setter Property="Visibility"
                     Value="Visible" />
+        </Style>
+        <Style TargetType="Button"
+               x:Key="AdminButton"
+               BasedOn="{StaticResource MenuButton}">
+            <Setter Property="Visibility"
+                    Value="Collapsed" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.IsAdmin}"
+                             Value="True">
+                    <Setter Property="Visibility"
+                            Value="Visible" />
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
         <Style TargetType="DockPanel"
                x:Key="SpinnerContainer">
@@ -197,27 +228,29 @@
                   Grid.Row="0"
                   Background="LightGray">
                 <DockPanel>
-                    <Button Content="Обновить"
-                            Background="{x:Null}"
-                            BorderBrush="{x:Null}"
-                            Foreground="DarkSlateGray"
-                            FontSize="15"
-                            FontWeight="Bold"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            Style="{StaticResource MaterialDesignFlatDarkButton}"
-                            Command="{Binding UpdateCommand}" />
+                    <Button Content="Главная"
+                            Style="{StaticResource MenuButton}"
+                            Command="{Binding ShowMainPageCommand}" />
+                    <Button Content="Рабочий стол"
+                            Style="{StaticResource AdminButton}"
+                            Command="{Binding ShowConsultingTasksCommand}" />
+                    <Button Content="Услуги"
+                            Style="{StaticResource MenuButton}"
+                            Command="{Binding ShowCompanyServicesCommand}" />
+                    <Button Content="Проекты"
+                            Style="{StaticResource MenuButton}"
+                            Command="{Binding ShowConsultingProjectsCommand}" />
+                    <Button Content="Блог"
+                            Style="{StaticResource MenuButton}"
+                            Command="{Binding ShowBlogPostsCommand}" />
+                    <Button Content="Контакты"
+                            Style="{StaticResource MenuButton}"
+                            Command="{Binding ShowContactsCommand}" />
 
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Right"
                                 Margin="20 0">
                         <Button Content="Регистрация"
-                                Background="{x:Null}"
-                                BorderBrush="{x:Null}"
-                                Foreground="DarkSlateGray"
-                                FontSize="15"
-                                FontWeight="Bold"
-                                VerticalAlignment="Center"
                                 IsEnabled="{Binding CommandExecuting, Converter={StaticResource InvertBooleanConverter}}"
                                 Style="{StaticResource AnonButton}"
                                 Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}">
@@ -226,12 +259,6 @@
                             </Button.CommandParameter>
                         </Button>
                         <Button Content="Вход"
-                                Background="{x:Null}"
-                                BorderBrush="{x:Null}"
-                                Foreground="DarkSlateGray"
-                                FontSize="15"
-                                FontWeight="Bold"
-                                VerticalAlignment="Center"
                                 IsEnabled="{Binding CommandExecuting, Converter={StaticResource InvertBooleanConverter}}"
                                 Style="{StaticResource AnonButton}"
                                 Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}">
@@ -247,12 +274,6 @@
                                    FontWeight="Bold"
                                    VerticalAlignment="Center" />
                         <Button Content="Выход"
-                                Background="{x:Null}"
-                                BorderBrush="{x:Null}"
-                                Foreground="DarkSlateGray"
-                                FontSize="15"
-                                FontWeight="Bold"
-                                VerticalAlignment="Center"
                                 IsEnabled="{Binding CommandExecuting, Converter={StaticResource InvertBooleanConverter}}"
                                 Style="{StaticResource NotAnonButton}"
                                 Command="{Binding LogoutCommand}" />

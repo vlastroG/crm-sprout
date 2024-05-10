@@ -24,10 +24,15 @@ namespace Consulting.Desktop.ViewModels {
             _messageBoxService = messageBoxService ?? throw new ArgumentNullException(nameof(messageBoxService));
             _selectedViewModel = _serviceProvider.GetRequiredService<AnonymMainViewModel>();
 
-            LoginCommand = new RelayCommandAsync(Login, CanLogin);
-            LogoutCommand = new RelayCommand(Logout, CanLogout);
-            RegisterCommand = new RelayCommandAsync(Register, CanRegister);
-            UpdateCommand = new RelayCommand(Update, CanUpdate);
+            LoginCommand = new RelayCommandAsync<PasswordBox>(Login!, CanLogin!);
+            LogoutCommand = new RelayCommand(Logout);
+            RegisterCommand = new RelayCommandAsync<PasswordBox>(Register!, CanRegister!);
+            ShowMainPageCommand = new RelayCommand(ShowMainPage);
+            ShowConsultingTasksCommand = new RelayCommand(ShowConsultingTasks);
+            ShowCompanyServicesCommand = new RelayCommand(ShowCompanyServices);
+            ShowConsultingProjectsCommand = new RelayCommand(ShowConsultingProjects);
+            ShowBlogPostsCommand = new RelayCommand(ShowBlogPosts);
+            ShowContactsCommand = new RelayCommand(ShowContacts);
         }
 
 
@@ -43,7 +48,11 @@ namespace Consulting.Desktop.ViewModels {
 
         public string UserName {
             get => _userName;
-            set => Set(ref _userName, value);
+            set {
+                if(Set(ref _userName, value)) {
+                    IsAdmin = _accountService.GetUserRole() == UserRoles.Admin;
+                }
+            }
         }
 
 
@@ -53,7 +62,17 @@ namespace Consulting.Desktop.ViewModels {
 
         public ICommand RegisterCommand { get; }
 
-        public ICommand UpdateCommand { get; }
+        public ICommand ShowMainPageCommand { get; }
+
+        public ICommand ShowConsultingTasksCommand { get; }
+
+        public ICommand ShowCompanyServicesCommand { get; }
+
+        public ICommand ShowConsultingProjectsCommand { get; }
+
+        public ICommand ShowBlogPostsCommand { get; }
+
+        public ICommand ShowContactsCommand { get; }
 
 
         private string? _email;
@@ -61,6 +80,12 @@ namespace Consulting.Desktop.ViewModels {
         public string? Email {
             get => _email;
             set => Set(ref _email, value);
+        }
+
+        private bool _isAdmin;
+        public bool IsAdmin {
+            get => _isAdmin;
+            set => Set(ref _isAdmin, value);
         }
 
 
@@ -71,14 +96,12 @@ namespace Consulting.Desktop.ViewModels {
         }
 
 
-        private bool CanLogin(object? parameter) =>
+        private bool CanLogin(PasswordBox parameter) =>
             !string.IsNullOrWhiteSpace(Email)
-            && parameter is not null
-            && parameter is PasswordBox;
+            && parameter is not null;
 
-        private async Task Login(object? parameter) {
+        private async Task Login(PasswordBox passwordBox) {
             bool result = false;
-            PasswordBox passwordBox = (parameter as PasswordBox)!;
             try {
                 CommandExecuting = true;
                 result = await _accountService.Login(Email!, passwordBox);
@@ -91,6 +114,7 @@ namespace Consulting.Desktop.ViewModels {
                 passwordBox.Password = string.Empty;
                 Email = string.Empty;
                 CommandExecuting = false;
+                ShowMainPage();
             }
 
             if(result) {
@@ -105,20 +129,16 @@ namespace Consulting.Desktop.ViewModels {
         }
 
 
-        private bool CanLogout(object? p) => true;
-        private void Logout(object? p) {
+        private void Logout() {
             _accountService.Logout();
-            UpdateWindow();
+            ShowMainPage();
         }
 
-        private bool CanRegister(object? p) =>
+        private bool CanRegister(PasswordBox p) =>
             !string.IsNullOrWhiteSpace(Email)
-            && p is not null
-            && p is PasswordBox
-            ;
+            && p is not null;
 
-        private async Task Register(object? p) {
-            PasswordBox passwordBox = (p as PasswordBox)!;
+        private async Task Register(PasswordBox passwordBox) {
             if(passwordBox.Password.Length < 8) {
                 _messageBoxService.ShowError("Пароль должен быть не менее 8 символов", "Статус регистрации");
                 return;
@@ -151,26 +171,45 @@ namespace Consulting.Desktop.ViewModels {
         }
 
 
-        private void UpdateWindow() {
-            UserName = _accountService.GetUserName();
-            switch(_accountService.GetUserRole()) {
-                case UserRoles.Admin:
-                    var adminModel = _serviceProvider.GetRequiredService<AdminMainViewModel>();
-                    SelectedViewModel = adminModel;
-                    break;
-                default:
-                    var anonModel = _serviceProvider.GetRequiredService<AnonymMainViewModel>();
-                    SelectedViewModel = anonModel;
-                    break;
-            }
+        private void ShowMainPage() {
+            ShowPage<AnonymMainViewModel>();
         }
 
-        private bool CanUpdate(object? p) => true;
-        private void Update(object? p) {
-            CommandExecuting = true;
-            Email = string.Empty;
-            UpdateWindow();
-            CommandExecuting = false;
+        private void ShowConsultingTasks() {
+            ShowPage<AdminConsultingTasksViewModel, AnonymMainViewModel>();
+        }
+
+        private void ShowCompanyServices() {
+            ShowPage<AdminCompanyServicesViewModel, AnonymCompanyServicesViewModel>();
+        }
+
+        private void ShowConsultingProjects() {
+            ShowPage<AdminConsultingProjectsViewModel, AnonymConsultingProjectsViewModel>();
+        }
+
+        private void ShowBlogPosts() {
+            ShowPage<AdminBlogPostsViewModel, AnonymBlogPostsViewModel>();
+        }
+
+        private void ShowContacts() {
+            ShowPage<AnonymContactsViewModel>();
+        }
+
+        private void ShowPage<T>() where T : BaseViewModel {
+            UserName = _accountService.GetUserName();
+            var viewModel = _serviceProvider.GetRequiredService<T>();
+            SelectedViewModel = viewModel;
+        }
+
+        private void ShowPage<TAdmin, TAnon>() where TAdmin : BaseViewModel where TAnon : BaseViewModel {
+            switch(_accountService.GetUserRole()) {
+                case UserRoles.Admin:
+                    ShowPage<TAdmin>();
+                    break;
+                default:
+                    ShowPage<TAnon>();
+                    break;
+            };
         }
     }
 }

@@ -2,12 +2,33 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:vm="clr-namespace:Consulting.Desktop.ViewModels"
                     xmlns:view="clr-namespace:Consulting.Desktop.Views">
-    
+
     <DataTemplate DataType="{x:Type vm:AnonymMainViewModel}">
         <view:AnonymMainView DataContext="{Binding}" />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:AnonymContactsViewModel}">
+        <view:AnonymContactsView DataContext="{Binding}" />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:AnonymBlogPostsViewModel}">
+        <view:AnonymBlogPostsView DataContext="{Binding}" />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:AnonymCompanyServicesViewModel}">
+        <view:AnonymCompanyServicesView DataContext="{Binding}" />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:AnonymConsultingProjectsViewModel}">
+        <view:AnonymConsultingProjectsView DataContext="{Binding}" />
+    </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vm:AdminMainViewModel}">
-        <view:AdminMainView DataContext="{Binding}" />
+    <DataTemplate DataType="{x:Type vm:AdminBlogPostsViewModel}">
+        <view:AdminBlogPostsView DataContext="{Binding}" />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:AdminCompanyServicesViewModel}">
+        <view:AdminCompanyServicesView DataContext="{Binding}" />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:AdminConsultingProjectsViewModel}">
+        <view:AdminConsultingProjectsView DataContext="{Binding}" />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:AdminConsultingTasksViewModel}">
+        <view:AdminConsultingTasksView DataContext="{Binding}" />
     </DataTemplate>
 </ResourceDictionary>
