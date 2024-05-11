@@ -7,17 +7,11 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:vm="clr-namespace:Consulting.Desktop.ViewModels"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:converters="clr-namespace:Consulting.Desktop.Converters"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="900"
              d:Background="White"
              d:DataContext="{d:DesignInstance vm:AnonymBlogPostsViewModel, IsDesignTimeCreatable=False}">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <converters:ByteArrayToImageConverter x:Key="ByteArrayToImageConverter" />
-        </ResourceDictionary>
-    </UserControl.Resources>
     <Grid>
         <DataGrid ItemsSource="{Binding Entities}">
             <DataGrid.Columns>

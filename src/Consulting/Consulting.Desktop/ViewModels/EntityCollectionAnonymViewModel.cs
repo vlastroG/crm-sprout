@@ -12,9 +12,9 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Consulting.Desktop.ViewModels {
     public abstract class EntityCollectionAnonymViewModel<TEntity, TDetailsWindow>
         : UpdatableViewModel where TEntity : Entity where TDetailsWindow : Window {
-        private readonly IRepository<TEntity> _repository;
-        private readonly IServiceProvider _serviceProvider;
-        private readonly MessageBoxService _messageBoxService;
+        private protected readonly IRepository<TEntity> _repository;
+        private protected readonly IServiceProvider _serviceProvider;
+        private protected readonly MessageBoxService _messageBoxService;
 
         protected EntityCollectionAnonymViewModel(
             IRepository<TEntity> repository,
@@ -41,8 +41,8 @@ namespace Consulting.Desktop.ViewModels {
         private async Task Update() {
             Entities.Clear();
             try {
-                var entitys = await _repository.Get();
-                foreach(var entity in entitys) {
+                var entities = await _repository.Get();
+                foreach(var entity in entities) {
                     Entities.Add(entity);
                 }
             } catch(ServerNotResponseException) {

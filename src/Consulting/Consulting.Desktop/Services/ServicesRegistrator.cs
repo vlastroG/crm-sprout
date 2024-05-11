@@ -13,6 +13,7 @@ namespace Consulting.Desktop.Services {
             .AddSingleton<IRepository<ConsultingProject>, ConsultingProjectsRepository>()
             .AddSingleton<IRepository<ConsultingTask>, ConsultingTasksRepository>()
             .AddSingleton<IRepository<ConsultingTaskStatus>, ConsultingTaskStatusesRepository>()
+            .AddSingleton<EntityEditor>()
             ;
     }
 }

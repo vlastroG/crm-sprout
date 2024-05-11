@@ -26,6 +26,15 @@ namespace Consulting.Desktop.Services {
                 MessageBoxImage.Error);
         }
 
+        public void ShowWarning(string message, string title) {
+            MessageBox.Show(
+                Application.Current.MainWindow,
+                message,
+                title,
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
+
         public bool ConfirmWarning(string message, string title) {
             return MessageBox.Show(
                 Application.Current.MainWindow,
