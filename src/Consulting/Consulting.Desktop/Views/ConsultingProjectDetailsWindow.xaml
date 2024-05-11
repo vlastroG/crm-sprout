@@ -4,9 +4,44 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Consulting.Desktop.Views"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:models="clr-namespace:Consulting.Models;assembly=Consulting.Models"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="ConsultingProjectDetailsWindow" Height="450" Width="800">
+        d:DesignHeight="450"
+        d:DesignWidth="900"
+        d:Background="White"
+        d:DataContext="{d:DesignInstance models:ConsultingProject, IsDesignTimeCreatable=True}">
     <Grid>
-        
+        <StackPanel>
+            <Image Source="{Binding Photo, Converter={StaticResource ByteArrayToImageConverter}}"
+                   MaxWidth="400"
+                   MaxHeight="225"
+                   HorizontalAlignment="Center"
+                   Margin="5" />
+            <Grid Margin="25">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock Text="Название"
+                           Style="{StaticResource Header}" />
+                <TextBlock Text="{Binding Name}"
+                           Grid.Column="1"
+                           Style="{StaticResource Value}" />
+                <TextBlock Text="Описание"
+                           Grid.Row="1"
+                           Style="{StaticResource Header}" />
+                <TextBlock Text="{Binding Description}"
+                           Grid.Column="1"
+                           Grid.Row="1"
+                           Style="{StaticResource Value}" />
+            </Grid>
+        </StackPanel>
     </Grid>
 </Window>

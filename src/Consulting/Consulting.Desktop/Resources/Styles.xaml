@@ -18,7 +18,28 @@
         <Setter Property="FontSize"
                 Value="15" />
     </Style>
-    
+
+    <Style TargetType="TextBlock"
+           x:Key="Value"
+           BasedOn="{StaticResource MaterialDesignTextBlock}">
+        <Setter Property="FontSize"
+                Value="15" />
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+        <Setter Property="TextWrapping"
+                Value="Wrap" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="Height"
+                Value="Auto" />
+    </Style>
+    <Style TargetType="TextBlock"
+           x:Key="Header"
+           BasedOn="{StaticResource Value}">
+        <Setter Property="FontWeight"
+                Value="DemiBold" />
+    </Style>
+
     <Style TargetType="DataGrid"
            BasedOn="{StaticResource MaterialDesignDataGrid}">
         <Setter Property="IsReadOnly"
