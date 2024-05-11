@@ -1,7 +1,5 @@
-using System.Windows.Controls;
-
 namespace Consulting.Desktop.Views {
-    public partial class AnonymConsultingProjectsView : UserControl {
+    public partial class AnonymConsultingProjectsView : System.Windows.Controls.UserControl {
         public AnonymConsultingProjectsView() {
             InitializeComponent();
         }

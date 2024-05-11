@@ -1,4 +1,4 @@
-using System.Windows.Controls;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace Consulting.Desktop.Views {
     public partial class AnonymMainView : UserControl {

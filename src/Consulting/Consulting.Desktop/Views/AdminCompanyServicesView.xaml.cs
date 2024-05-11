@@ -1,7 +1,5 @@
-using System.Windows.Controls;
-
 namespace Consulting.Desktop.Views {
-    public partial class AdminCompanyServicesView : UserControl {
+    public partial class AdminCompanyServicesView : System.Windows.Controls.UserControl {
         public AdminCompanyServicesView() {
             InitializeComponent();
         }

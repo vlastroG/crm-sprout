@@ -11,7 +11,8 @@
         d:DesignHeight="450"
         d:DesignWidth="900"
         d:Background="White"
-        d:DataContext="{d:DesignInstance models:ConsultingTask, IsDesignTimeCreatable=True}">
+        d:DataContext="{d:DesignInstance models:ConsultingTask, IsDesignTimeCreatable=True}"
+        WindowStartupLocation="CenterOwner">
     <StackPanel>
         <Grid Margin="25">
             <Grid.ColumnDefinitions>

@@ -6,7 +6,7 @@ namespace Consulting.Desktop.Views {
     public partial class ConsultingProjectCreationWindow : Window {
         public ConsultingProjectCreationWindow(ConsultingProjectCreationViewModel viewModel) {
             DataContext = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
-            Owner = Application.Current.MainWindow;
+            Owner = System.Windows.Application.Current.MainWindow;
             InitializeComponent();
         }
     }
