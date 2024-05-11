@@ -1,4 +1,5 @@
 using Consulting.Models;
+using Consulting.Models.Exceptions;
 
 namespace Consulting.Desktop.Services {
     public interface IRepository<T> where T : Entity {

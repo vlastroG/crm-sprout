@@ -8,8 +8,8 @@ namespace Consulting.Desktop.Services {
 
 
         public void ShowInfo(string message, string title) {
-            MessageBox.Show(
-                Application.Current.MainWindow,
+            System.Windows.MessageBox.Show(
+                System.Windows.Application.Current.MainWindow,
                 message,
                 title,
                 MessageBoxButton.OK,
@@ -18,8 +18,8 @@ namespace Consulting.Desktop.Services {
 
 
         public void ShowError(string message, string title) {
-            MessageBox.Show(
-                Application.Current.MainWindow,
+            System.Windows.MessageBox.Show(
+                System.Windows.Application.Current.MainWindow,
                 message,
                 title,
                 MessageBoxButton.OK,
@@ -27,8 +27,8 @@ namespace Consulting.Desktop.Services {
         }
 
         public void ShowWarning(string message, string title) {
-            MessageBox.Show(
-                Application.Current.MainWindow,
+            System.Windows.MessageBox.Show(
+                System.Windows.Application.Current.MainWindow,
                 message,
                 title,
                 MessageBoxButton.OK,
@@ -36,8 +36,8 @@ namespace Consulting.Desktop.Services {
         }
 
         public bool ConfirmWarning(string message, string title) {
-            return MessageBox.Show(
-                Application.Current.MainWindow,
+            return System.Windows.MessageBox.Show(
+                System.Windows.Application.Current.MainWindow,
                 message,
                 title,
                 MessageBoxButton.YesNo,

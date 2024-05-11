@@ -14,6 +14,7 @@ namespace Consulting.Desktop.Services {
             .AddSingleton<IRepository<ConsultingTask>, ConsultingTasksRepository>()
             .AddSingleton<IRepository<ConsultingTaskStatus>, ConsultingTaskStatusesRepository>()
             .AddSingleton<EntityEditor>()
+            .AddSingleton<ImageProvider>()
             ;
     }
 }
