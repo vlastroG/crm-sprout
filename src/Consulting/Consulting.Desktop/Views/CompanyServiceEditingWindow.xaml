@@ -4,9 +4,42 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Consulting.Desktop.Views"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:vm="clr-namespace:Consulting.Desktop.ViewModels"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="CompanyServiceEditingWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="Редактирование услуги"
+        MinHeight="260"
+        MinWidth="500"
+        d:Background="White"
+        d:DataContext="{d:DesignInstance vm:CompanyServiceEditingViewModel, IsDesignTimeCreatable=False}"
+        WindowStartupLocation="CenterOwner">
+    <DockPanel VerticalAlignment="Top"
+               Margin="25">
+        <Grid DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Text="Название"
+                       Style="{StaticResource Header}" />
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                     Grid.Column="1" />
+            <TextBlock Text="Описание"
+                       Grid.Row="1"
+                       Style="{StaticResource Header}" />
+            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                     Grid.Column="1"
+                     Grid.Row="1" />
+        </Grid>
+        <StackPanel DockPanel.Dock="Bottom"
+                    Margin="0 25 0 0">
+            <Button Content="Сохранить"
+                    Command="{Binding SaveCommand}" />
+        </StackPanel>
+    </DockPanel>
 </Window>

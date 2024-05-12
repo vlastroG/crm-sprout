@@ -80,8 +80,7 @@ namespace Consulting.Desktop.ViewModels {
                 if(success) {
                     _messageBoxService.ShowInfo("Услуга успешно добавлена, можете закрыть окно", "Информация");
                 } else {
-                    _messageBoxService.ShowError("Не удалось создать услугу с заданными параметрами." +
-                        "\nПроверьте что изображение не более 128 КБ и размером 400х225 px", "Ошибка");
+                    _messageBoxService.ShowError("Не удалось создать услугу с заданными параметрами.", "Ошибка");
                 }
             } catch(ServerNotResponseException) {
                 _messageBoxService.ShowError("Сервер не отвечает", "Ошибка");
