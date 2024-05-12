@@ -8,7 +8,7 @@ using Consulting.Models.Exceptions;
 
 namespace Consulting.Desktop.ViewModels {
     public class AdminConsultingProjectsViewModel
-        : EntityCollectionAdminViewModel<ConsultingProject, ConsultingProjectEditingWindow> {
+        : EntityCollectionAdminViewModel<ConsultingProject, ConsultingProjectDetailsWindow> {
         private readonly EntityEditor _entityEditor;
 
         public AdminConsultingProjectsViewModel(
