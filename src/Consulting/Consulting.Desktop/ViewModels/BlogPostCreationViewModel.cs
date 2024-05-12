@@ -15,6 +15,7 @@ namespace Consulting.Desktop.ViewModels {
         private readonly ImageProvider _imageProvider;
         private readonly IRepository<BlogPost> _repository;
         private readonly MessageBoxService _messageBoxService;
+        private const int _imgMaxSize = 128 * 1024;
 
         public BlogPostCreationViewModel(
             AccountService accountService,
@@ -42,7 +43,11 @@ namespace Consulting.Desktop.ViewModels {
         [MaxLength(32)]
         public string Name {
             get => _name;
-            set => Set(ref _name, value);
+            set {
+                if(Set(ref _name, value)) {
+                    OnPropertyChanged(nameof(Error));
+                }
+            }
         }
 
         private string _contentShort = string.Empty;
@@ -50,20 +55,32 @@ namespace Consulting.Desktop.ViewModels {
         [MaxLength(256)]
         public string ContentShort {
             get => _contentShort;
-            set => Set(ref _contentShort, value);
+            set {
+                if(Set(ref _contentShort, value)) {
+                    OnPropertyChanged(nameof(Error));
+                }
+            }
         }
 
         private string? _contentFull;
         [MaxLength(1024)]
         public string? ContentFull {
             get => _contentFull;
-            set => Set(ref _contentFull, value);
+            set {
+                if(Set(ref _contentFull, value)) {
+                    OnPropertyChanged(nameof(Error));
+                }
+            }
         }
 
         private FileInfo? _image;
         public FileInfo? Image {
             get => _image;
-            set => Set(ref _image, value);
+            set {
+                if(Set(ref _image, value)) {
+                    OnPropertyChanged(nameof(Error));
+                }
+            }
         }
 
 
@@ -74,8 +91,13 @@ namespace Consulting.Desktop.ViewModels {
                     case nameof(Name):
                     case nameof(ContentShort):
                     case nameof(ContentFull): {
-                        PropertyInfo property = GetType().GetProperties().First(prop => prop.Name == columnName);
+                        PropertyInfo property = GetProperty(columnName);
                         error = GetStringPropertyError(property);
+                        break;
+                    }
+                    case nameof(Image): {
+                        PropertyInfo property = GetProperty(columnName);
+                        error = GetFileInfoPropertyError(property, _imgMaxSize);
                         break;
                     }
                     default:

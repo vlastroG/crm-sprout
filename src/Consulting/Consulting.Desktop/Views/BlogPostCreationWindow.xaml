@@ -26,23 +26,23 @@
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="40" />
                 <RowDefinition />
             </Grid.RowDefinitions>
             <TextBlock Text="Название"
                        Style="{StaticResource Header}" />
-            <TextBox Text="{Binding Name}"
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
                      Grid.Column="1" />
             <TextBlock Text="Контент сокращенно"
                        Grid.Row="1"
                        Style="{StaticResource Header}" />
-            <TextBox Text="{Binding ContentShort}"
+            <TextBox Text="{Binding ContentShort, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
                      Grid.Column="1"
                      Grid.Row="1" />
             <TextBlock Text="Контент полностью"
                        Grid.Row="2"
                        Style="{StaticResource Header}" />
-            <TextBox Text="{Binding ContentFull}"
+            <TextBox Text="{Binding ContentFull, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
                      Grid.Column="1"
                      Grid.Row="2" />
             <TextBlock Text="Файл изображения"
@@ -54,8 +54,11 @@
                         Command="{Binding SelectImageCommand}"
                         Width="100"
                         Margin="0 0 5 0" />
-                <TextBlock Text="{Binding Image.FullName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True, TargetNullValue={x:Static system:String.Empty}}"
+                <TextBlock Text="{Binding Image.FullName, TargetNullValue={x:Static system:String.Empty}}"
                            Style="{StaticResource Value}" />
+                <TextBlock Margin="5 0"
+                           Text="{Binding Error}"
+                           Style="{StaticResource ErrorText}" />
             </DockPanel>
         </Grid>
         <StackPanel DockPanel.Dock="Bottom"

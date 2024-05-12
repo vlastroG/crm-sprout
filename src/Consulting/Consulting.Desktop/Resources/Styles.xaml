@@ -7,8 +7,9 @@
         <Setter Property="VerticalContentAlignment"
                 Value="Center" />
     </Style>
-    
-    <Style TargetType="TextBlock" x:Key="WrappedText">
+
+    <Style TargetType="TextBlock"
+           x:Key="WrappedText">
         <Setter Property="VerticalAlignment"
                 Value="Center" />
         <Setter Property="TextWrapping"
@@ -36,6 +37,16 @@
     <Style TargetType="TextBlock"
            x:Key="Header"
            BasedOn="{StaticResource Value}">
+        <Setter Property="FontWeight"
+                Value="DemiBold" />
+    </Style>
+    <Style TargetType="TextBlock"
+           x:Key="ErrorText"
+           BasedOn="{StaticResource WrappedText}">
+        <Setter Property="Foreground"
+                Value="Red" />
+        <Setter Property="FontSize"
+                Value="13" />
         <Setter Property="FontWeight"
                 Value="DemiBold" />
     </Style>

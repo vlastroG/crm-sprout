@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Reflection;
 
 namespace Consulting.Desktop.ViewModels {
@@ -38,6 +39,25 @@ namespace Consulting.Desktop.ViewModels {
                 error = "Поле не может начинаться или заканчиваться пробелом";
             }
             return error;
+        }
+
+        private protected string GetFileInfoPropertyError(PropertyInfo property, int maxBytesLength) {
+            if(property is null) { throw new ArgumentNullException(nameof(property)); }
+
+            FileInfo? file = property.GetValue(this) as FileInfo;
+            string error = string.Empty;
+            if(file?.Length > maxBytesLength) {
+                error = $"Не более {maxBytesLength / 1024} КБ";
+            }
+            return error;
+        }
+
+        private protected PropertyInfo GetProperty(string name) {
+            if(string.IsNullOrWhiteSpace(name)) {
+                throw new ArgumentException($"'{nameof(name)}' cannot be null or whitespace.", nameof(name));
+            }
+
+            return GetType().GetProperties().First(prop => prop.Name == name);
         }
     }
 }
