@@ -9,10 +9,10 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="Детали проекта"
-        MinHeight="500"
+        MinHeight="250"
         MinWidth="500"
-        d:DesignHeight="450"
-        d:DesignWidth="900"
+        Height="650"
+        Width="600"
         d:Background="White"
         d:DataContext="{d:DesignInstance models:ConsultingProject, IsDesignTimeCreatable=True}"
         WindowStartupLocation="CenterOwner">

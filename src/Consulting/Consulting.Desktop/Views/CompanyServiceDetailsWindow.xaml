@@ -9,10 +9,10 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="Детали услуги"
-        MinHeight="500"
+        MinHeight="200"
         MinWidth="500"
-        d:DesignHeight="450"
-        d:DesignWidth="900"
+        Height="200"
+        Width="500"
         d:Background="White"
         d:DataContext="{d:DesignInstance models:CompanyService, IsDesignTimeCreatable=True}"
         WindowStartupLocation="CenterOwner">

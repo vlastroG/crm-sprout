@@ -10,8 +10,10 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="Добавление поста"
-        MinHeight="260"
+        MinHeight="300"
         MinWidth="500"
+        Height="300"
+        Width="500"
         d:Background="White"
         d:DataContext="{d:DesignInstance vm:BlogPostCreationViewModel, IsDesignTimeCreatable=False}"
         WindowStartupLocation="CenterOwner">
