@@ -30,7 +30,7 @@ namespace Consulting.Desktop.Services {
             using HttpClient client = _httpClientFactory.CreateClient();
             AddAuthenticationHeader(client);
             try {
-                var response = await client.PutAsJsonAsync(Url + Constants.Create, item);
+                var response = await client.PostAsJsonAsync(Url + Constants.Create, item);
                 return response.StatusCode switch {
                     HttpStatusCode.OK => true,
                     HttpStatusCode.Unauthorized => throw new UnauthorizedUserException(),
@@ -70,7 +70,7 @@ namespace Consulting.Desktop.Services {
             using HttpClient client = _httpClientFactory.CreateClient();
             AddAuthenticationHeader(client);
             try {
-                var response = await client.PostAsJsonAsync(Url + Constants.Update + item.Id, item);
+                var response = await client.PutAsJsonAsync(Url + Constants.Update + item.Id, item);
                 return response.StatusCode switch {
                     HttpStatusCode.OK => true,
                     HttpStatusCode.Unauthorized => throw new UnauthorizedUserException(),
