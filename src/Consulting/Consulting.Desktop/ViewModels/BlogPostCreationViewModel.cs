@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Reflection;
@@ -10,7 +9,7 @@ using Consulting.Models;
 using Consulting.Models.Exceptions;
 
 namespace Consulting.Desktop.ViewModels {
-    public class BlogPostCreationViewModel : ValidatableViewModel, IDataErrorInfo {
+    public class BlogPostCreationViewModel : ValidatableViewModel {
         private readonly AccountService _accountService;
         private readonly ImageProvider _imageProvider;
         private readonly IRepository<BlogPost> _repository;
