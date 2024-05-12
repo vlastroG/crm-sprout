@@ -28,6 +28,7 @@ namespace Consulting.Desktop.ViewModels {
 
             bool required = property.GetCustomAttribute<RequiredAttribute>() != null;
             int maxLength = property.GetCustomAttribute<MaxLengthAttribute>()?.Length ?? int.MaxValue;
+            EmailAddressAttribute? emailAttribute = property.GetCustomAttribute<EmailAddressAttribute>();
             string? propValue = property.GetValue(this)?.ToString();
 
             string error = string.Empty;
@@ -37,6 +38,9 @@ namespace Consulting.Desktop.ViewModels {
                 error = $"Не более {maxLength} символов";
             } else if((propValue?.StartsWith(' ') ?? false) || (propValue?.EndsWith(' ') ?? false)) {
                 error = "Поле не может начинаться или заканчиваться пробелом";
+            } else if(emailAttribute is not null) {
+                bool valid = emailAttribute.IsValid(propValue);
+                error = valid ? string.Empty : "Некорректный email";
             }
             return error;
         }

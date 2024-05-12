@@ -19,6 +19,10 @@
         <view:AnonymConsultingProjectsView DataContext="{Binding}" />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vm:ConsultingTaskCreationViewModel}">
+        <view:ConsultingTaskCreationView DataContext="{Binding}" />
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type vm:AdminBlogPostsViewModel}">
         <view:AdminBlogPostsView DataContext="{Binding}" />
     </DataTemplate>

@@ -89,7 +89,7 @@ namespace Consulting.Desktop.ViewModels {
                 _messageBoxService.ShowError("Ваша сессия истекла, войдите заново", "Ошибка авторизации");
                 _accountService.Logout();
             } catch(AccessDeniedException) {
-                _messageBoxService.ShowError("У вас нет прав для совершения данной операции", "Ошибка удаления");
+                _messageBoxService.ShowError("У вас нет прав для совершения данной операции", "Ошибка");
                 _accountService.Logout();
             }
         }

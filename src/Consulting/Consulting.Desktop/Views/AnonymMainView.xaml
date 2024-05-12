@@ -13,8 +13,10 @@
              Background="WhiteSmoke"
              d:DataContext="{d:DesignInstance vm:AnonymMainViewModel, IsDesignTimeCreatable=False}">
     <Grid>
-        <TextBlock HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   Text="AnonymMainView" />
+        <ContentControl Grid.Row="1"
+                        Content="{
+                Binding TaskCreationViewModel, 
+                UpdateSourceTrigger=PropertyChanged}">
+        </ContentControl>
     </Grid>
 </UserControl>

@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="Consulting.Desktop.Views.ConsultingTaskCreationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Consulting.Desktop.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:vm="clr-namespace:Consulting.Desktop.ViewModels"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             d:Background="White"
+             d:DataContext="{d:DesignInstance vm:ConsultingTaskCreationViewModel, IsDesignTimeCreatable=False}">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadCompanyServicesCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <DockPanel VerticalAlignment="Top"
+               Margin="25">
+        <Grid DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="ФИО"
+                       Style="{StaticResource Header}" />
+            <TextBox Text="{Binding CreatorName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                     Style="{StaticResource InputText}"
+                     Grid.Column="1"/>
+            <TextBlock Text="Email"
+                       Grid.Row="1"
+                       Style="{StaticResource Header}" />
+            <TextBox Text="{Binding CreatorEmail, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                     Style="{StaticResource InputText}"
+                     Grid.Column="1"
+                     Grid.Row="1" />
+            <TextBlock Text="Описание"
+                       Grid.Row="2"
+                       Style="{StaticResource Header}" />
+            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                     Style="{StaticResource InputText}"
+                     Grid.Column="1"
+                     Grid.Row="2" />
+            <TextBlock Text="Вид услуги"
+                       Grid.Row="3"
+                       Style="{StaticResource Header}" />
+            <ComboBox SelectedItem="{Binding CompanyService, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                      ItemsSource="{Binding CompanyServices}"
+                      Grid.Column="1"
+                      Grid.Row="3">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </Grid>
+        <StackPanel DockPanel.Dock="Bottom"
+                    Margin="0 25 0 0">
+            <Button Content="Создать"
+                    Command="{Binding CreateCommand}" />
+        </StackPanel>
+    </DockPanel>
+</UserControl>

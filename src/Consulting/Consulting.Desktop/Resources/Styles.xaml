@@ -50,6 +50,12 @@
         <Setter Property="FontWeight"
                 Value="DemiBold" />
     </Style>
+    <Style TargetType="TextBox"
+           x:Key="InputText"
+            BasedOn="{StaticResource MaterialDesignTextBox}">
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+    </Style>
 
     <Style TargetType="DataGrid"
            BasedOn="{StaticResource MaterialDesignDataGrid}">
