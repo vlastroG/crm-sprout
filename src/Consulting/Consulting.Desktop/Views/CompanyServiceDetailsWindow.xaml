@@ -1,0 +1,44 @@
+﻿<Window x:Class="Consulting.Desktop.Views.CompanyServiceDetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Consulting.Desktop.Views"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:models="clr-namespace:Consulting.Models;assembly=Consulting.Models"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        Title="Детали услуги"
+        MinHeight="200"
+        MinWidth="500"
+        Height="200"
+        Width="500"
+        d:Background="White"
+        d:DataContext="{d:DesignInstance models:CompanyService, IsDesignTimeCreatable=True}"
+        WindowStartupLocation="CenterOwner">
+    <StackPanel>
+        <Grid Margin="25">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Text="Название"
+                       Style="{StaticResource Header}" />
+            <TextBlock Text="{Binding Name}"
+                       Grid.Column="1"
+                       Style="{StaticResource Value}" />
+            <TextBlock Text="Описание"
+                       Grid.Row="1"
+                       Style="{StaticResource Header}" />
+            <TextBlock Text="{Binding Description}"
+                       Grid.Column="1"
+                       Grid.Row="1"
+                       Style="{StaticResource Value}" />
+        </Grid>
+    </StackPanel>
+</Window>

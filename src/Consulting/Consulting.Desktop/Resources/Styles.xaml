@@ -1,0 +1,123 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style TargetType="Button"
+           BasedOn="{StaticResource MaterialDesignFlatMidBgButton}">
+        <Setter Property="Height"
+                Value="30" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+    </Style>
+
+    <Style TargetType="TextBlock"
+           x:Key="WrappedText">
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="TextWrapping"
+                Value="Wrap" />
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+        <Setter Property="FontSize"
+                Value="15" />
+    </Style>
+
+    <Style TargetType="TextBlock"
+           x:Key="Value"
+           BasedOn="{StaticResource MaterialDesignTextBlock}">
+        <Setter Property="FontSize"
+                Value="15" />
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+        <Setter Property="TextWrapping"
+                Value="Wrap" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="Height"
+                Value="Auto" />
+    </Style>
+    <Style TargetType="TextBlock"
+           x:Key="Header"
+           BasedOn="{StaticResource Value}">
+        <Setter Property="FontWeight"
+                Value="DemiBold" />
+    </Style>
+    <Style TargetType="TextBlock"
+           x:Key="ErrorText"
+           BasedOn="{StaticResource WrappedText}">
+        <Setter Property="Foreground"
+                Value="Red" />
+        <Setter Property="FontSize"
+                Value="13" />
+        <Setter Property="FontWeight"
+                Value="DemiBold" />
+    </Style>
+    <Style TargetType="TextBox"
+           x:Key="InputText"
+            BasedOn="{StaticResource MaterialDesignTextBox}">
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+    </Style>
+
+    <Style TargetType="DataGrid"
+           BasedOn="{StaticResource MaterialDesignDataGrid}">
+        <Setter Property="IsReadOnly"
+                Value="True" />
+        <Setter Property="AutoGenerateColumns"
+                Value="False" />
+        <Setter Property="CanUserAddRows"
+                Value="False" />
+        <Setter Property="CanUserDeleteRows"
+                Value="False" />
+        <Setter Property="EnableRowVirtualization"
+                Value="True" />
+        <Setter Property="EnableColumnVirtualization"
+                Value="True" />
+        <Setter Property="VirtualizingPanel.IsVirtualizingWhenGrouping"
+                Value="True" />
+        <Setter Property="VirtualizingPanel.VirtualizationMode"
+                Value="Recycling" />
+        <Setter Property="VirtualizingPanel.IsVirtualizing"
+                Value="True" />
+        <Setter Property="SelectionMode"
+                Value="Single" />
+        <Setter Property="ScrollViewer.CanContentScroll"
+                Value="True" />
+    </Style>
+
+    <Style TargetType="Button"
+           x:Key="MenuButton"
+           BasedOn="{StaticResource MaterialDesignFlatDarkButton}">
+        <Setter Property="Background"
+                Value="{x:Null}" />
+        <Setter Property="BorderBrush"
+                Value="{x:Null}" />
+        <Setter Property="Foreground"
+                Value="DarkSlateGray" />
+        <Setter Property="FontSize"
+                Value="15" />
+        <Setter Property="FontWeight"
+                Value="Bold" />
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+    </Style>
+
+    <Style TargetType="Button"
+           x:Key="CrudButton"
+           BasedOn="{StaticResource MaterialDesignFlatDarkButton}">
+        <Setter Property="Height"
+                Value="Auto" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="HorizontalAlignment"
+                Value="Center" />
+        <Setter Property="FontWeight"
+                Value="Bold" />
+        <Setter Property="Background"
+                Value="{x:Null}" />
+        <Setter Property="BorderBrush"
+                Value="{x:Null}" />
+        <Setter Property="Foreground"
+                Value="Black" />
+    </Style>
+</ResourceDictionary>

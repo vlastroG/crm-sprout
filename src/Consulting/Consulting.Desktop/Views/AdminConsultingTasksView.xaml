@@ -1,0 +1,94 @@
+﻿<UserControl x:Class="Consulting.Desktop.Views.AdminConsultingTasksView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Consulting.Desktop.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:vm="clr-namespace:Consulting.Desktop.ViewModels"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="900"
+             d:Background="White"
+             d:DataContext="{d:DesignInstance vm:AdminConsultingTasksViewModel, IsDesignTimeCreatable=False}">
+    <Grid>
+        <StackPanel>
+            <DockPanel HorizontalAlignment="Center">
+                <DockPanel.Resources>
+                    <Style TargetType="DatePicker"
+                           BasedOn="{StaticResource MaterialDesignDatePicker}">
+                        <Setter Property="Width"
+                                Value="110" />
+                        <Setter Property="HorizontalContentAlignment"
+                                Value="Right" />
+                        <Setter Property="Margin"
+                                Value="10 0" />
+                        <Setter Property="SelectedDateFormat"
+                                Value="Short" />
+                    </Style>
+                </DockPanel.Resources>
+                <TextBlock Text="Дата начала:"
+                           Style="{StaticResource WrappedText}" />
+                <DatePicker SelectedDate="{Binding StartDate}" />
+                <TextBlock Text="Дата конца:"
+                           Style="{StaticResource WrappedText}" />
+                <DatePicker SelectedDate="{Binding EndDate}" />
+                <Button Style="{StaticResource CrudButton}"
+                        Content="Отфильтровать"
+                        Command="{Binding FilterByDateCommand}" />
+                <Button Style="{StaticResource CrudButton}"
+                        Content="Сбросить"
+                        Command="{Binding ResetFilterCommand}" />
+            </DockPanel>
+            <DataGrid ItemsSource="{Binding Entities}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id"
+                                        Width="1*"
+                                        Binding="{Binding Id}"
+                                        ElementStyle="{StaticResource WrappedText}" />
+                    <DataGridTextColumn Header="Дата создания"
+                                        Width="1*"
+                                        Binding="{Binding CreationDate}"
+                                        ElementStyle="{StaticResource WrappedText}" />
+                    <DataGridTextColumn Header="ФИО"
+                                        Width="1*"
+                                        Binding="{Binding CreatorName}"
+                                        ElementStyle="{StaticResource WrappedText}" />
+                    <DataGridTextColumn Header="Услуга"
+                                        Width="1*"
+                                        Binding="{Binding CompanyService.Name}"
+                                        ElementStyle="{StaticResource WrappedText}" />
+                    <DataGridTextColumn Header="Email"
+                                        Width="1*"
+                                        Binding="{Binding CreatorEmail}"
+                                        ElementStyle="{StaticResource WrappedText}" />
+                    <DataGridTextColumn Header="Статус"
+                                        Width="1*"
+                                        Binding="{Binding Status.Name}"
+                                        ElementStyle="{StaticResource WrappedText}" />
+                    <DataGridTemplateColumn Width="1*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Style="{StaticResource CrudButton}"
+                                        Content="Редактировать"
+                                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}},Path=DataContext.EditCommand}"
+                                        CommandParameter="{Binding}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="1*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Style="{StaticResource CrudButton}"
+                                        Content="Подробности"
+                                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}},Path=DataContext.ShowDetailsCommand}"
+                                        CommandParameter="{Binding}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+    </Grid>
+</UserControl>

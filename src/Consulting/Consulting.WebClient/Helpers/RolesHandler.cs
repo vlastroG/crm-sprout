@@ -1,6 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
+using Consulting.Models;
+
 namespace Consulting.WebClient.Helpers {
     internal static class RolesHandler {
         internal static bool IsAdminUser(this ISession session) {
