@@ -115,7 +115,7 @@ namespace Consulting.Desktop.ViewModels {
         }
 
         public void LoadEntity(BlogPost blogPost) {
-            _blogPost = blogPost;
+            _blogPost = blogPost ?? throw new ArgumentNullException(nameof(blogPost));
             Name = blogPost.Name;
             ContentShort = blogPost.ContentShort;
             ContentFull = blogPost.ContentFull;
